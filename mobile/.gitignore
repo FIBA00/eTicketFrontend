@@ -1,0 +1,13 @@
+node_modules/
+.expo/
+dist/
+.env
+*.keystore
+*.jks
+*.pem
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+*.tsbuildinfo

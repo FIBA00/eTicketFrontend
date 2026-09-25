@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "E-Ticket",
+    "slug": "eticket-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eticket.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.eticket.mobile",
+      "versionCode": 1,
+      "permissions": [
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_CONNECT",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
+        "REQUEST_INSTALL_PACKAGES"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-sqlite"
+    ],
+    "scheme": "eticket",
+    "extra": {
+      "apiUrl": "http://localhost:3000/api/v1",
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
+  }
+}

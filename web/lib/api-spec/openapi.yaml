@@ -1,0 +1,174 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: tickets
+    description: Passenger ticket operations
+  - name: dashboard
+    description: Station ticket and revenue totals
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /tickets:
+    get:
+      operationId: getTickets
+      tags: [tickets]
+      summary: List issued passenger tickets
+      responses:
+        "200":
+          description: Issued tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+    post:
+      operationId: createTicket
+      tags: [tickets]
+      summary: Record a passenger ticket
+      description: Ticket IDs are idempotency keys so offline tickets can be safely synchronized more than once.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketInput"
+      responses:
+        "201":
+          description: Ticket saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "200":
+          description: The ticket was already synchronized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+  /tickets/summary:
+    get:
+      operationId: getTicketSummary
+      tags: [dashboard]
+      summary: Get today's ticket and revenue totals
+      responses:
+        "200":
+          description: Revenue totals for the current Ethiopian calendar day
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TicketSummary"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    Ticket:
+      type: object
+      properties:
+        id: { type: string }
+        routeId: { type: string }
+        origin: { type: string }
+        destination: { type: string }
+        distanceKm: { type: number }
+        fareETB: { type: number }
+        serviceChargeRate: { type: number }
+        serviceChargeETB: { type: number }
+        vatETB: { type: number }
+        stationFeeETB: { type: number }
+        totalETB: { type: number }
+        ticketerCommissionETB: { type: number }
+        vehiclePlate: { type: string }
+        issuedAt: { type: string, format: date-time }
+      required:
+        - id
+        - routeId
+        - origin
+        - destination
+        - distanceKm
+        - fareETB
+        - serviceChargeRate
+        - serviceChargeETB
+        - vatETB
+        - stationFeeETB
+        - totalETB
+        - ticketerCommissionETB
+        - vehiclePlate
+        - issuedAt
+    TicketInput:
+      type: object
+      properties:
+        id: { type: string, minLength: 1 }
+        routeId: { type: string, minLength: 1 }
+        origin: { type: string, minLength: 1 }
+        destination: { type: string, minLength: 1 }
+        distanceKm: { type: number, exclusiveMinimum: 0 }
+        fareETB: { type: number, exclusiveMinimum: 0 }
+        serviceChargeRate: { type: number, enum: [0.04, 0.05] }
+        serviceChargeETB: { type: number, minimum: 0 }
+        vatETB: { type: number, minimum: 0 }
+        stationFeeETB: { type: number, minimum: 0 }
+        totalETB: { type: number, exclusiveMinimum: 0 }
+        ticketerCommissionETB: { type: number, minimum: 0 }
+        vehiclePlate: { type: string, minLength: 1 }
+        issuedAt: { type: string, format: date-time }
+      required:
+        - id
+        - routeId
+        - origin
+        - destination
+        - distanceKm
+        - fareETB
+        - serviceChargeRate
+        - serviceChargeETB
+        - vatETB
+        - stationFeeETB
+        - totalETB
+        - ticketerCommissionETB
+        - vehiclePlate
+        - issuedAt
+    TicketSummary:
+      type: object
+      properties:
+        ticketCount: { type: integer }
+        grossCollectionETB: { type: number }
+        baseFaresETB: { type: number }
+        serviceChargesETB: { type: number }
+        vatETB: { type: number }
+        stationFeesETB: { type: number }
+        commissionsETB: { type: number }
+        netSettlementETB: { type: number }
+      required:
+        - ticketCount
+        - grossCollectionETB
+        - baseFaresETB
+        - serviceChargesETB
+        - vatETB
+        - stationFeesETB
+        - commissionsETB
+        - netSettlementETB
+
