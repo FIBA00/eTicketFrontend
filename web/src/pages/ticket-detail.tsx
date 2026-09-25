@@ -15,7 +15,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
@@ -50,7 +56,9 @@ export default function TicketDetailPage() {
   const route = routes?.find((r) => r.id === ticket?.routeId);
   const vehicle = vehicles?.find((v) => v.id === ticket?.vehicleId);
   const originStation = stations?.find((s) => s.id === route?.originStationId);
-  const destinationStation = stations?.find((s) => s.id === route?.destinationStationId);
+  const destinationStation = stations?.find(
+    (s) => s.id === route?.destinationStationId,
+  );
 
   async function handleVoid() {
     if (!voidReason.trim()) {
@@ -91,7 +99,11 @@ export default function TicketDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setLocation("/tickets")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setLocation("/tickets")}
+          >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
@@ -152,12 +164,16 @@ export default function TicketDetailPage() {
               }}
             />
           )}
-          {!isVoid && hasRole("TICKETER", "SYSTEM_ADMIN", "STATION_CONTROLLER") && (
-            <Button variant="destructive" onClick={() => setVoidDialogOpen(true)}>
-              <XCircle className="mr-2 h-4 w-4" />
-              Void Ticket
-            </Button>
-          )}
+          {!isVoid &&
+            hasRole("TICKETER", "SYSTEM_ADMIN", "STATION_CONTROLLER") && (
+              <Button
+                variant="destructive"
+                onClick={() => setVoidDialogOpen(true)}
+              >
+                <XCircle className="mr-2 h-4 w-4" />
+                Void Ticket
+              </Button>
+            )}
         </div>
       </div>
 
@@ -172,7 +188,8 @@ export default function TicketDetailPage() {
             Reason: {ticket.voidReason}
           </p>
           <p className="text-xs text-red-500 mt-1">
-            Voided at {ticket.voidedAt ? new Date(ticket.voidedAt).toLocaleString() : "—"}
+            Voided at{" "}
+            {ticket.voidedAt ? new Date(ticket.voidedAt).toLocaleString() : "—"}
           </p>
         </div>
       )}
@@ -260,28 +277,40 @@ export default function TicketDetailPage() {
             <CardContent className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Base Fare</span>
-                <span className="font-mono">{formatCents(ticket.fareCents)} ETB</span>
+                <span className="font-mono">
+                  {formatCents(ticket.fareCents)} ETB
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Service Charge</span>
-                <span className="font-mono">{formatCents(ticket.serviceChargeCents)} ETB</span>
+                <span className="font-mono">
+                  {formatCents(ticket.serviceChargeCents)} ETB
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">VAT (15%)</span>
-                <span className="font-mono">{formatCents(ticket.vatCents)} ETB</span>
+                <span className="font-mono">
+                  {formatCents(ticket.vatCents)} ETB
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Station Fee</span>
-                <span className="font-mono">{formatCents(ticket.stationFeeCents)} ETB</span>
+                <span className="font-mono">
+                  {formatCents(ticket.stationFeeCents)} ETB
+                </span>
               </div>
               <Separator />
               <div className="flex justify-between font-medium">
                 <span>Total Paid</span>
-                <span className="font-mono text-lg">{formatCents(ticket.totalCents)} ETB</span>
+                <span className="font-mono text-lg">
+                  {formatCents(ticket.totalCents)} ETB
+                </span>
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Ticketer Commission</span>
-                <span className="font-mono">{formatCents(ticket.commissionCents)} ETB</span>
+                <span className="font-mono">
+                  {formatCents(ticket.commissionCents)} ETB
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -294,7 +323,8 @@ export default function TicketDetailPage() {
           <DialogHeader>
             <DialogTitle>Void Ticket</DialogTitle>
             <DialogDescription>
-              This will cancel ticket {ticket.ticketNumber}. This action cannot be undone.
+              This will cancel ticket {ticket.ticketNumber}. This action cannot
+              be undone.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -317,7 +347,11 @@ export default function TicketDetailPage() {
             <Button variant="outline" onClick={() => setVoidDialogOpen(false)}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleVoid} disabled={voidTicket.isPending}>
+            <Button
+              variant="destructive"
+              onClick={handleVoid}
+              disabled={voidTicket.isPending}
+            >
               {voidTicket.isPending ? "Voiding..." : "Void Ticket"}
             </Button>
           </DialogFooter>
