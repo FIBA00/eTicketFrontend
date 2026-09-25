@@ -1,10 +1,23 @@
 import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, Bus, Loader2, Printer, Ticket as TicketIcon, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  Bus,
+  Loader2,
+  Printer,
+  Ticket as TicketIcon,
+  Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -35,7 +48,7 @@ export default function TicketIssuePage() {
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
   const [driverName, setDriverName] = useState("");
   const [departureDate, setDepartureDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [departureTime, setDepartureTime] = useState("14:00");
   const [passengerName, setPassengerName] = useState("");
@@ -148,14 +161,14 @@ export default function TicketIssuePage() {
       `Ticket queued for sync
 
 ` +
-      `Vehicle: ${selectedVehicle?.plateNumber}
+        `Vehicle: ${selectedVehicle?.plateNumber}
 ` +
-      `Route: ${selectedRoute?.originStation?.name} → ${selectedRoute?.destinationStation?.name}
+        `Route: ${selectedRoute?.originStation?.name} → ${selectedRoute?.destinationStation?.name}
 ` +
-      `Total: ${farePreview ? formatCents(farePreview.totalCents) : "?"} ETB
+        `Total: ${farePreview ? formatCents(farePreview.totalCents) : "?"} ETB
 
 ` +
-      `Will sync when online.`
+        `Will sync when online.`,
     );
 
     // Reset form
@@ -169,7 +182,11 @@ export default function TicketIssuePage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => setLocation("/ticketing")}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setLocation("/ticketing")}
+        >
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
@@ -193,7 +210,10 @@ export default function TicketIssuePage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Vehicle *</Label>
-                  <Select value={selectedVehicleId} onValueChange={setSelectedVehicleId}>
+                  <Select
+                    value={selectedVehicleId}
+                    onValueChange={setSelectedVehicleId}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select vehicle" />
                     </SelectTrigger>
@@ -219,15 +239,18 @@ export default function TicketIssuePage() {
 
               <div className="space-y-2">
                 <Label>Route *</Label>
-                <Select value={selectedRouteId} onValueChange={setSelectedRouteId}>
+                <Select
+                  value={selectedRouteId}
+                  onValueChange={setSelectedRouteId}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select route" />
                   </SelectTrigger>
                   <SelectContent>
                     {routes?.map((route) => (
                       <SelectItem key={route.id} value={route.id}>
-                        {route.originStation?.name} → {route.destinationStation?.name}
-                        {" "}({route.distanceKm} km)
+                        {route.originStation?.name} →{" "}
+                        {route.destinationStation?.name} ({route.distanceKm} km)
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -265,7 +288,10 @@ export default function TicketIssuePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <RadioGroup value={printMode} onValueChange={(v) => setPrintMode(v as "single" | "batch")}>
+              <RadioGroup
+                value={printMode}
+                onValueChange={(v) => setPrintMode(v as "single" | "batch")}
+              >
                 <div className="flex items-center space-x-2 rounded-md border p-3">
                   <RadioGroupItem value="single" id="single" />
                   <Label htmlFor="single" className="flex-1 cursor-pointer">
@@ -351,31 +377,42 @@ export default function TicketIssuePage() {
                 <CardTitle>Fare Summary</CardTitle>
                 {selectedRoute && (
                   <CardDescription>
-                    {selectedRoute.originStation?.name} → {selectedRoute.destinationStation?.name}
+                    {selectedRoute.originStation?.name} →{" "}
+                    {selectedRoute.destinationStation?.name}
                   </CardDescription>
                 )}
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Base Fare</span>
-                  <span className="font-mono">{formatCents(farePreview.fareCents)} ETB</span>
+                  <span className="font-mono">
+                    {formatCents(farePreview.fareCents)} ETB
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Service Charge</span>
-                  <span className="font-mono">{formatCents(farePreview.serviceChargeCents)} ETB</span>
+                  <span className="font-mono">
+                    {formatCents(farePreview.serviceChargeCents)} ETB
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">VAT (15%)</span>
-                  <span className="font-mono">{formatCents(farePreview.vatCents)} ETB</span>
+                  <span className="font-mono">
+                    {formatCents(farePreview.vatCents)} ETB
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Station Fee</span>
-                  <span className="font-mono">{formatCents(farePreview.stationFeeCents)} ETB</span>
+                  <span className="font-mono">
+                    {formatCents(farePreview.stationFeeCents)} ETB
+                  </span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-medium">
                   <span>Total per Ticket</span>
-                  <span className="font-mono text-lg">{formatCents(farePreview.totalCents)} ETB</span>
+                  <span className="font-mono text-lg">
+                    {formatCents(farePreview.totalCents)} ETB
+                  </span>
                 </div>
 
                 {batchTotal && (
@@ -398,7 +435,9 @@ export default function TicketIssuePage() {
 
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>Ticketer Commission</span>
-                  <span className="font-mono">{formatCents(farePreview.commissionCents)} ETB</span>
+                  <span className="font-mono">
+                    {formatCents(farePreview.commissionCents)} ETB
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -414,14 +453,21 @@ export default function TicketIssuePage() {
           {/* Action Button */}
           <Button
             onClick={handleIssueTicket}
-            disabled={isSubmitting || !selectedRouteId || !selectedVehicleId || !driverName}
+            disabled={
+              isSubmitting ||
+              !selectedRouteId ||
+              !selectedVehicleId ||
+              !driverName
+            }
             className="w-full"
             size="lg"
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {printMode === "batch" ? "Printing Batch..." : "Printing Ticket..."}
+                {printMode === "batch"
+                  ? "Printing Batch..."
+                  : "Printing Ticket..."}
               </>
             ) : (
               <>

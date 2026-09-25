@@ -22,20 +22,21 @@ Offline-first sync between web/mobile clients and backend.
 
 ## Components
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `sync.service.ts` | Backend | Process mutations, handle conflicts, log to sync_log |
-| `sync.routes.ts` | Backend | POST /sync/push, GET /sync/pull, GET /sync/status |
-| `offline-queue.ts` | Web | localStorage queue for mutations |
-| `sync-engine.ts` | Web | Push/pull logic, auto-sync, online detection |
-| `sync-status.tsx` | Web | UI component showing sync state |
-| `engine.ts` | Mobile | SQLite queue sync (already exists) |
+| Component          | Location | Purpose                                              |
+| ------------------ | -------- | ---------------------------------------------------- |
+| `sync.service.ts`  | Backend  | Process mutations, handle conflicts, log to sync_log |
+| `sync.routes.ts`   | Backend  | POST /sync/push, GET /sync/pull, GET /sync/status    |
+| `offline-queue.ts` | Web      | localStorage queue for mutations                     |
+| `sync-engine.ts`   | Web      | Push/pull logic, auto-sync, online detection         |
+| `sync-status.tsx`  | Web      | UI component showing sync state                      |
+| `engine.ts`        | Mobile   | SQLite queue sync (already exists)                   |
 
 ## Sync Flow
 
 ### 1. Queue Mutation (Offline)
 
 **Web:**
+
 ```typescript
 queueTicketIssue({
   routeId, vehicleId, passengerName, seatNumber, ...
@@ -44,6 +45,7 @@ queueTicketIssue({
 ```
 
 **Mobile:**
+
 ```typescript
 await addToSyncQueue({
   id: clientMutationId,
@@ -57,6 +59,7 @@ await addToSyncQueue({
 ### 2. Push to Server
 
 **Request:**
+
 ```json
 POST /api/v1/sync/push
 {
@@ -76,31 +79,36 @@ POST /api/v1/sync/push
 ```
 
 **Response:**
+
 ```json
 {
   "applied": [{ "clientMutationId": "uuid", "serverVersion": 1 }],
-  "conflicts": [{ "clientMutationId": "uuid", "reason": "Seat 5 already taken" }],
+  "conflicts": [
+    { "clientMutationId": "uuid", "reason": "Seat 5 already taken" }
+  ],
   "rejected": [{ "clientMutationId": "uuid", "reason": "Invalid route" }]
 }
 ```
 
 ### 3. Conflict Resolution
 
-| Conflict Type | Handling |
-|-------------|----------|
+| Conflict Type      | Handling                                |
+| ------------------ | --------------------------------------- |
 | Seat already taken | Mark as CONFLICT, alert user to reissue |
-| Duplicate mutation | Return existing ticket (idempotent) |
-| Invalid data | REJECT with reason |
-| Network error | Retry with exponential backoff |
+| Duplicate mutation | Return existing ticket (idempotent)     |
+| Invalid data       | REJECT with reason                      |
+| Network error      | Retry with exponential backoff          |
 
 ### 4. Pull Updates
 
 **Request:**
+
 ```
 GET /api/v1/sync/pull?since=0&limit=100
 ```
 
 **Response:**
+
 ```json
 {
   "mutations": [...],
@@ -115,11 +123,13 @@ Client invalidates relevant React Query caches to refetch fresh data.
 Every mutation has `clientMutationId` (UUID generated client-side).
 
 Server `sync_log` table has unique constraint:
+
 ```sql
 UNIQUE(station_id, client_mutation_id)
 ```
 
 If same mutation pushed twice:
+
 1. Server checks sync_log
 2. If already APPLIED → return success with existing ticket
 3. If CONFLICT → return conflict reason
@@ -127,18 +137,20 @@ If same mutation pushed twice:
 
 ## Auto-Sync
 
-| Platform | Trigger | Interval |
-|----------|---------|----------|
-| Web | Online event + polling | 5 minutes |
-| Mobile | Background fetch | 15 minutes |
+| Platform | Trigger                | Interval   |
+| -------- | ---------------------- | ---------- |
+| Web      | Online event + polling | 5 minutes  |
+| Mobile   | Background fetch       | 15 minutes |
 
 ## Files Changed (Week 5)
 
 ### Backend
+
 - `apps/api/src/modules/sync/sync.service.ts` — NEW
 - `apps/api/src/modules/sync/sync.routes.ts` — UPDATED
 
 ### Web
+
 - `src/lib/offline-queue.ts` — NEW
 - `src/lib/sync-engine.ts` — NEW
 - `src/components/sync-status.tsx` — NEW
@@ -146,4 +158,5 @@ If same mutation pushed twice:
 - `src/App.tsx` — UPDATED (auto-sync init)
 
 ### Mobile
+
 - No changes (already has sync)

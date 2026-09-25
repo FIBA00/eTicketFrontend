@@ -5,11 +5,13 @@
 ## What we did
 
 ### 1. Analyzed proposal document
+
 - Read Afaan Oromo + English PDF versions
 - Extracted business rules, roles, revenue model
 - Identified tech stack (originally Laravel + MySQL)
 
 ### 2. Backend v1 (Prisma)
+
 - Scaffolded Express + Prisma + PostgreSQL
 - Full auth, users, stations, vehicles, routes modules
 - Shared packages (types + money calculation)
@@ -17,12 +19,14 @@
 - **Status: Complete but user prefers Drizzle**
 
 ### 3. Backend v2 (Drizzle)
+
 - Rebuilt with Drizzle ORM instead of Prisma
 - Same features as v1
 - Plain TypeScript schema (no separate DSL)
 - **Status: Complete, zipped**
 
 ### 4. Frontend auth integration
+
 - Analyzed AI-generated frontend (React + Express + Drizzle)
 - Identified gaps: no auth, no roles, hardcoded data
 - Added complete auth system:
@@ -35,6 +39,7 @@
 - **Status: Complete, zipped**
 
 ### 5. Documentation
+
 - Created comprehensive docs folder with 15 documents:
   1. Project overview
   2. Architecture
@@ -54,10 +59,10 @@
 
 ## Deliverables
 
-| File | Description |
-|------|-------------|
-| `e-ticket-week1.zip` | Backend v1 (Prisma) — superseded |
-| `e-ticket-v2-week1.zip` | Backend v2 (Drizzle) — current backend |
+| File                     | Description                                         |
+| ------------------------ | --------------------------------------------------- |
+| `e-ticket-week1.zip`     | Backend v1 (Prisma) — superseded                    |
+| `e-ticket-v2-week1.zip`  | Backend v2 (Drizzle) — current backend              |
 | `e-ticket-full-auth.zip` | Full frontend + auth integration — current frontend |
 
 ## Next steps
@@ -70,11 +75,11 @@
 
 ## Key decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| Express over NestJS | Familiarity, speed, no framework lock-in |
-| Drizzle over Prisma | Plain TS schema, no codegen, Zod-friendly |
-| PostgreSQL over MySQL | JSONB for sync, row versioning |
-| Integer cents for money | No float errors |
-| JWT access + refresh | Stateless, revocable, mobile-friendly |
+| Decision                        | Rationale                                   |
+| ------------------------------- | ------------------------------------------- |
+| Express over NestJS             | Familiarity, speed, no framework lock-in    |
+| Drizzle over Prisma             | Plain TS schema, no codegen, Zod-friendly   |
+| PostgreSQL over MySQL           | JSONB for sync, row versioning              |
+| Integer cents for money         | No float errors                             |
+| JWT access + refresh            | Stateless, revocable, mobile-friendly       |
 | Integrate auth into AI frontend | AI frontend works, has good offline pattern |

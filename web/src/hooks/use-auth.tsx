@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user) return false;
       return roles.includes(user.role);
     },
-    [user]
+    [user],
   );
 
   return (

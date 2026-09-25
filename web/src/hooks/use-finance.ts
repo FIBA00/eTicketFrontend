@@ -127,7 +127,10 @@ export function useWithdrawalHistory(limit = 20) {
 export function useRequestWithdrawal() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { amountCents: number; weekStartDate: string }) => {
+    mutationFn: async (data: {
+      amountCents: number;
+      weekStartDate: string;
+    }) => {
       const res = await authFetch("/finance/withdrawal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

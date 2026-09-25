@@ -114,7 +114,10 @@ export async function logout(): Promise<void> {
 }
 
 // Authenticated fetch wrapper — auto-refresh on 401
-export async function authFetch(path: string, options: RequestInit = {}): Promise<Response> {
+export async function authFetch(
+  path: string,
+  options: RequestInit = {},
+): Promise<Response> {
   if (!accessToken) {
     const ok = await refreshAccessToken();
     if (!ok) throw new Error("Not authenticated");
@@ -125,7 +128,11 @@ export async function authFetch(path: string, options: RequestInit = {}): Promis
     Authorization: `Bearer ${accessToken}`,
   };
 
-  let res = await fetch(`${API_BASE}${path}`, { ...options, headers, credentials: "include" });
+  let res = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers,
+    credentials: "include",
+  });
 
   // Access token expired — try refresh once
   if (res.status === 401) {
@@ -136,7 +143,11 @@ export async function authFetch(path: string, options: RequestInit = {}): Promis
       ...options.headers,
       Authorization: `Bearer ${accessToken}`,
     };
-    res = await fetch(`${API_BASE}${path}`, { ...options, headers: retryHeaders, credentials: "include" });
+    res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: retryHeaders,
+      credentials: "include",
+    });
   }
 
   return res;

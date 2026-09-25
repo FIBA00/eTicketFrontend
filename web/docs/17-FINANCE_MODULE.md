@@ -6,16 +6,16 @@ Daily audits, commission tracking, and withdrawal management.
 
 ## Backend Endpoints
 
-| Method | Path | Description | Roles |
-|--------|------|-------------|-------|
-| POST | /finance/daily-audit | Generate audit for date | ADMIN, CONTROLLER, TICKETER |
-| GET | /finance/daily-audit?date= | Get audit for date | All |
-| GET | /finance/audit-history | Get audit history | All |
-| GET | /finance/commission | Get ticketer commission | All |
-| POST | /finance/withdrawal | Request withdrawal | TICKETER, AGENT |
-| GET | /finance/withdrawal | Get withdrawal history | All |
-| POST | /finance/withdrawal/:id/process | Process withdrawal | ADMIN, CONTROLLER |
-| GET | /finance/revenue | Get revenue report | ADMIN, CONTROLLER |
+| Method | Path                            | Description             | Roles                       |
+| ------ | ------------------------------- | ----------------------- | --------------------------- |
+| POST   | /finance/daily-audit            | Generate audit for date | ADMIN, CONTROLLER, TICKETER |
+| GET    | /finance/daily-audit?date=      | Get audit for date      | All                         |
+| GET    | /finance/audit-history          | Get audit history       | All                         |
+| GET    | /finance/commission             | Get ticketer commission | All                         |
+| POST   | /finance/withdrawal             | Request withdrawal      | TICKETER, AGENT             |
+| GET    | /finance/withdrawal             | Get withdrawal history  | All                         |
+| POST   | /finance/withdrawal/:id/process | Process withdrawal      | ADMIN, CONTROLLER           |
+| GET    | /finance/revenue                | Get revenue report      | ADMIN, CONTROLLER           |
 
 ## Business Logic
 
@@ -66,20 +66,22 @@ availableCents = weeklyCommission - alreadyWithdrawn
 
 Tabs based on role:
 
-| Tab | Role | Content |
-|-----|------|---------|
-| Overview | Admin | Today's audit, quick stats |
-| Daily Audits | Admin | Audit history list |
-| My Commission | Ticketer | Commission summary, withdrawal form, history |
-| Revenue Report | Admin | Date range report with daily breakdown |
+| Tab            | Role     | Content                                      |
+| -------------- | -------- | -------------------------------------------- |
+| Overview       | Admin    | Today's audit, quick stats                   |
+| Daily Audits   | Admin    | Audit history list                           |
+| My Commission  | Ticketer | Commission summary, withdrawal form, history |
+| Revenue Report | Admin    | Date range report with daily breakdown       |
 
 ## Files
 
 ### Backend
+
 - `apps/api/src/modules/finance/finance.service.ts` — Business logic
 - `apps/api/src/modules/finance/finance.routes.ts` — API endpoints
 
 ### Frontend
+
 - `src/hooks/use-finance.ts` — React Query hooks
 - `src/pages/revenue.tsx` — Finance page (replaces old placeholder)
 

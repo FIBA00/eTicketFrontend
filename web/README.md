@@ -20,34 +20,36 @@ Integrated frontend + backend for Ethiopian bus station e-ticketing.
 
 The frontend now has full authentication integrated with the v2 backend:
 
-| File | Purpose |
-|------|---------|
-| `src/lib/auth.ts` | Token management, login/logout/refresh, `authFetch` wrapper |
-| `src/hooks/use-auth.tsx` | React context, session restore, `useAuth()` hook |
-| `src/pages/login.tsx` | Login page with demo accounts |
-| `src/components/protected-route.tsx` | Route guard with role checks |
-| `src/components/user-menu.tsx` | User avatar + logout in header |
+| File                                 | Purpose                                                     |
+| ------------------------------------ | ----------------------------------------------------------- |
+| `src/lib/auth.ts`                    | Token management, login/logout/refresh, `authFetch` wrapper |
+| `src/hooks/use-auth.tsx`             | React context, session restore, `useAuth()` hook            |
+| `src/pages/login.tsx`                | Login page with demo accounts                               |
+| `src/components/protected-route.tsx` | Route guard with role checks                                |
+| `src/components/user-menu.tsx`       | User avatar + logout in header                              |
 
 ## Protected Routes
 
-| Route | Roles |
-|-------|-------|
-| `/login` | Public |
-| `/` | All authenticated |
+| Route        | Roles                                      |
+| ------------ | ------------------------------------------ |
+| `/login`     | Public                                     |
+| `/`          | All authenticated                          |
 | `/ticketing` | TICKETER, SYSTEM_ADMIN, STATION_CONTROLLER |
-| `/tickets` | All authenticated |
-| `/revenue` | SYSTEM_ADMIN, STATION_CONTROLLER |
-| `/settings` | SYSTEM_ADMIN only |
+| `/tickets`   | All authenticated                          |
+| `/revenue`   | SYSTEM_ADMIN, STATION_CONTROLLER           |
+| `/settings`  | SYSTEM_ADMIN only                          |
 
 ## Quick start
 
 ### Backend (v2)
+
 ```bash
 cd /path/to/e-ticket-v2/apps/api
 npm run dev   # Runs on :3000
 ```
 
 ### Frontend
+
 ```bash
 cd artifacts/transit-eticket
 cp .env.example .env
@@ -57,11 +59,12 @@ pnpm dev
 ```
 
 ### Demo accounts
-| Username | Password | Role |
-|----------|----------|------|
-| admin | admin123 | SYSTEM_ADMIN |
-| agent1 | agent123 | AGENT |
-| ticketer1 | ticketer123 | TICKETER |
+
+| Username  | Password    | Role         |
+| --------- | ----------- | ------------ |
+| admin     | admin123    | SYSTEM_ADMIN |
+| agent1    | agent123    | AGENT        |
+| ticketer1 | ticketer123 | TICKETER     |
 
 ## How auth works
 

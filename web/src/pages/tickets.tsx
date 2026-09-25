@@ -41,54 +41,92 @@ export default function TicketsPage() {
   });
 
   const columns = [
-    { key: "ticketNumber", header: "Ticket #", render: (t: Ticket) => (
-      <span className="font-mono text-sm font-medium">{t.ticketNumber}</span>
-    )},
-    { key: "passenger", header: "Passenger", render: (t: Ticket) => (
-      <span className="font-medium">{t.passengerName}</span>
-    )},
-    { key: "route", header: "Route", render: (t: Ticket) => {
-      const route = routes?.find((r) => r.id === t.routeId);
-      return route
-        ? `${route.originStation?.name ?? "?"} → ${route.destinationStation?.name ?? "?"}`
-        : "—";
-    }},
-    { key: "vehicle", header: "Vehicle", render: (t: Ticket) => {
-      const vehicle = vehicles?.find((v) => v.id === t.vehicleId);
-      return vehicle?.plateNumber ?? "—";
-    }},
-    { key: "seat", header: "Seat", render: (t: Ticket) => (
-      <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-muted text-xs font-medium">
-        {t.seatNumber}
-      </span>
-    )},
-    { key: "date", header: "Date", render: (t: Ticket) => (
-      new Date(t.departureDate).toLocaleDateString()
-    )},
-    { key: "amount", header: "Amount", render: (t: Ticket) => (
-      <span className="font-mono">{formatCents(t.totalCents)} ETB</span>
-    )},
-    { key: "status", header: "Status", render: (t: Ticket) => (
-      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-        t.status === "ISSUED" ? "bg-green-100 text-green-700" :
-        t.status === "VOID" ? "bg-red-100 text-red-700" :
-        "bg-gray-100 text-gray-500"
-      }`}>
-        {t.status}
-      </span>
-    )},
-    { key: "actions", header: "", render: (t: Ticket) => (
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={(e) => {
-          e.stopPropagation();
-          setLocation(`/tickets/${t.id}`);
-        }}
-      >
-        <Eye className="h-4 w-4" />
-      </Button>
-    )},
+    {
+      key: "ticketNumber",
+      header: "Ticket #",
+      render: (t: Ticket) => (
+        <span className="font-mono text-sm font-medium">{t.ticketNumber}</span>
+      ),
+    },
+    {
+      key: "passenger",
+      header: "Passenger",
+      render: (t: Ticket) => (
+        <span className="font-medium">{t.passengerName}</span>
+      ),
+    },
+    {
+      key: "route",
+      header: "Route",
+      render: (t: Ticket) => {
+        const route = routes?.find((r) => r.id === t.routeId);
+        return route
+          ? `${route.originStation?.name ?? "?"} → ${route.destinationStation?.name ?? "?"}`
+          : "—";
+      },
+    },
+    {
+      key: "vehicle",
+      header: "Vehicle",
+      render: (t: Ticket) => {
+        const vehicle = vehicles?.find((v) => v.id === t.vehicleId);
+        return vehicle?.plateNumber ?? "—";
+      },
+    },
+    {
+      key: "seat",
+      header: "Seat",
+      render: (t: Ticket) => (
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-muted text-xs font-medium">
+          {t.seatNumber}
+        </span>
+      ),
+    },
+    {
+      key: "date",
+      header: "Date",
+      render: (t: Ticket) => new Date(t.departureDate).toLocaleDateString(),
+    },
+    {
+      key: "amount",
+      header: "Amount",
+      render: (t: Ticket) => (
+        <span className="font-mono">{formatCents(t.totalCents)} ETB</span>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (t: Ticket) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+            t.status === "ISSUED"
+              ? "bg-green-100 text-green-700"
+              : t.status === "VOID"
+                ? "bg-red-100 text-red-700"
+                : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          {t.status}
+        </span>
+      ),
+    },
+    {
+      key: "actions",
+      header: "",
+      render: (t: Ticket) => (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            setLocation(`/tickets/${t.id}`);
+          }}
+        >
+          <Eye className="h-4 w-4" />
+        </Button>
+      ),
+    },
   ];
 
   return (

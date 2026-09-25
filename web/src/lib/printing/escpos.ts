@@ -59,7 +59,6 @@ function formatTime(isoString: string): string {
   });
 }
 
-
 function addQrCode(bytes: number[], data: string) {
   // QR code data length
   const len = data.length + 3;
@@ -76,7 +75,10 @@ function addQrCode(bytes: number[], data: string) {
   bytes.push(GS, 0x28, 0x6b, 0x03, 0x00, 0x31, 0x51, 0x30);
 }
 
-export function generateTicketReceipt(data: PrintTicketData, width: 58 | 80 = 58): Uint8Array {
+export function generateTicketReceipt(
+  data: PrintTicketData,
+  width: 58 | 80 = 58,
+): Uint8Array {
   const bytes: number[] = [];
 
   // Helper to add text
@@ -120,7 +122,9 @@ export function generateTicketReceipt(data: PrintTicketData, width: 58 | 80 = 58
   cmd(CMD.ALIGN_LEFT);
   text(`Ticket: ${data.ticketNumber}`);
   newline();
-  text(`Date: ${formatDate(data.issuedAt)}  Time: ${formatTime(data.issuedAt)}`);
+  text(
+    `Date: ${formatDate(data.issuedAt)}  Time: ${formatTime(data.issuedAt)}`,
+  );
   newline();
   newline();
 
@@ -152,7 +156,9 @@ export function generateTicketReceipt(data: PrintTicketData, width: 58 | 80 = 58
     text(`Ticket #${data.batchSequence} in batch`);
     newline();
   }
-  text(`Departure: ${formatDate(data.departureDate)} ${formatTime(data.departureTime)}`);
+  text(
+    `Departure: ${formatDate(data.departureDate)} ${formatTime(data.departureTime)}`,
+  );
   newline();
   newline();
 
@@ -189,7 +195,10 @@ export function generateTicketReceipt(data: PrintTicketData, width: 58 | 80 = 58
   newline();
 
   // Commission — small text
-  printLine("Ticketer commission:", `${formatCents(data.fare.commissionCents)}`);
+  printLine(
+    "Ticketer commission:",
+    `${formatCents(data.fare.commissionCents)}`,
+  );
   text(`Served by: ${data.ticketer.name}`);
   newline();
   newline();
@@ -223,19 +232,22 @@ export function generateTicketReceipt(data: PrintTicketData, width: 58 | 80 = 58
 }
 
 // Generate daily summary receipt
-export function generateDailySummary(data: {
-  date: string;
-  stationName: string;
-  totalTickets: number;
-  totalRevenueCents: number;
-  totalCommissionCents: number;
-  netRevenueCents: number;
-  tickets: Array<{
-    ticketNumber: string;
-    passengerName: string;
-    totalCents: number;
-  }>;
-}, width: 58 | 80 = 58): Uint8Array {
+export function generateDailySummary(
+  data: {
+    date: string;
+    stationName: string;
+    totalTickets: number;
+    totalRevenueCents: number;
+    totalCommissionCents: number;
+    netRevenueCents: number;
+    tickets: Array<{
+      ticketNumber: string;
+      passengerName: string;
+      totalCents: number;
+    }>;
+  },
+  width: 58 | 80 = 58,
+): Uint8Array {
   const bytes: number[] = [];
 
   const text = (str: string) => {

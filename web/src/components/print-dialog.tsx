@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Printer, Bluetooth, Chrome, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  Printer,
+  Bluetooth,
+  Chrome,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +17,11 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { printManager, type PrintMethod, type PrinterStatus } from "@/lib/printing";
+import {
+  printManager,
+  type PrintMethod,
+  type PrinterStatus,
+} from "@/lib/printing";
 import { isBluetoothSupported } from "@/lib/printing/web-print";
 
 interface PrintDialogProps {
@@ -21,7 +31,12 @@ interface PrintDialogProps {
   ticketNumber?: string;
 }
 
-export function PrintDialog({ open, onOpenChange, onPrint, ticketNumber }: PrintDialogProps) {
+export function PrintDialog({
+  open,
+  onOpenChange,
+  onPrint,
+  ticketNumber,
+}: PrintDialogProps) {
   const [method, setMethod] = useState<PrintMethod>("browser");
   const [status, setStatus] = useState<PrinterStatus | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -74,14 +89,15 @@ export function PrintDialog({ open, onOpenChange, onPrint, ticketNumber }: Print
             <Printer className="h-5 w-5" />
             Print Ticket {ticketNumber && `#${ticketNumber}`}
           </DialogTitle>
-          <DialogDescription>
-            Choose how to print this ticket
-          </DialogDescription>
+          <DialogDescription>Choose how to print this ticket</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Method selection */}
-          <RadioGroup value={method} onValueChange={(v) => setMethod(v as PrintMethod)}>
+          <RadioGroup
+            value={method}
+            onValueChange={(v) => setMethod(v as PrintMethod)}
+          >
             <div className="flex items-center space-x-2 rounded-md border p-3">
               <RadioGroupItem value="browser" id="browser" />
               <Label htmlFor="browser" className="flex-1 cursor-pointer">
@@ -97,9 +113,18 @@ export function PrintDialog({ open, onOpenChange, onPrint, ticketNumber }: Print
               </Label>
             </div>
 
-            <div className={`flex items-center space-x-2 rounded-md border p-3 ${!bluetoothSupported ? "opacity-50" : ""}`}>
-              <RadioGroupItem value="bluetooth" id="bluetooth" disabled={!bluetoothSupported} />
-              <Label htmlFor="bluetooth" className={`flex-1 ${!bluetoothSupported ? "cursor-not-allowed" : "cursor-pointer"}`}>
+            <div
+              className={`flex items-center space-x-2 rounded-md border p-3 ${!bluetoothSupported ? "opacity-50" : ""}`}
+            >
+              <RadioGroupItem
+                value="bluetooth"
+                id="bluetooth"
+                disabled={!bluetoothSupported}
+              />
+              <Label
+                htmlFor="bluetooth"
+                className={`flex-1 ${!bluetoothSupported ? "cursor-not-allowed" : "cursor-pointer"}`}
+              >
                 <div className="flex items-center gap-2">
                   <Bluetooth className="h-4 w-4" />
                   <div>
@@ -152,7 +177,9 @@ export function PrintDialog({ open, onOpenChange, onPrint, ticketNumber }: Print
           </Button>
           <Button
             onClick={handlePrint}
-            disabled={isPrinting || (method === "bluetooth" && !status?.connected)}
+            disabled={
+              isPrinting || (method === "bluetooth" && !status?.connected)
+            }
           >
             {isPrinting ? "Printing..." : "Print"}
           </Button>

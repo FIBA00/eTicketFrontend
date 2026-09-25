@@ -1,8 +1,20 @@
 import { useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { ArrowLeft, Download, Printer, Ticket as TicketIcon, XCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Download,
+  Printer,
+  Ticket as TicketIcon,
+  XCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -75,7 +87,11 @@ export default function BatchViewPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setLocation("/tickets")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setLocation("/tickets")}
+          >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
@@ -100,13 +116,17 @@ export default function BatchViewPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Sold</CardDescription>
-            <CardTitle className="text-2xl text-green-600">{batch.soldTickets}</CardTitle>
+            <CardTitle className="text-2xl text-green-600">
+              {batch.soldTickets}
+            </CardTitle>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Void</CardDescription>
-            <CardTitle className="text-2xl text-red-600">{batch.voidTickets}</CardTitle>
+            <CardTitle className="text-2xl text-red-600">
+              {batch.voidTickets}
+            </CardTitle>
           </CardHeader>
         </Card>
         <Card>
@@ -175,17 +195,21 @@ export default function BatchViewPage() {
                     onClick={() => setLocation(`/tickets/${ticket.id}`)}
                   >
                     <td className="p-3">{ticket.batchSequence}</td>
-                    <td className="p-3 font-mono text-sm">{ticket.ticketNumber}</td>
+                    <td className="p-3 font-mono text-sm">
+                      {ticket.ticketNumber}
+                    </td>
                     <td className="p-3">{ticket.passengerName}</td>
-                    <td className="p-3 font-mono">{formatCents(ticket.totalCents)} ETB</td>
+                    <td className="p-3 font-mono">
+                      {formatCents(ticket.totalCents)} ETB
+                    </td>
                     <td className="p-3">
                       <Badge
                         variant={
                           ticket.status === "ISSUED"
                             ? "default"
                             : ticket.status === "VOID"
-                            ? "destructive"
-                            : "secondary"
+                              ? "destructive"
+                              : "secondary"
                         }
                       >
                         {ticket.status}

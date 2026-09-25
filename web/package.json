@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "lint": "prettier --write ."
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -44,6 +45,9 @@
     "@tailwindcss/typography": "^0.5.15",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.0.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -56,6 +60,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "catalog:",
     "input-otp": "^1.4.2",
+    "jsdom": "^24.0.0",
     "lucide-react": "catalog:",
     "next-themes": "^0.4.6",
     "react": "catalog:",
@@ -71,12 +76,11 @@
     "tw-animate-css": "^1.4.0",
     "vaul": "^1.1.2",
     "vite": "catalog:",
-    "wouter": "^3.3.5",
-    "zod": "catalog:",
     "vitest": "^1.6.0",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/user-event": "^14.0.0",
-    "jsdom": "^24.0.0"
+    "wouter": "^3.3.5",
+    "zod": "catalog:"
+  },
+  "dependencies": {
+    "prettier": "^3.9.9"
   }
 }

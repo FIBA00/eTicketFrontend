@@ -2,7 +2,7 @@
 // Uses localStorage — same pattern as mobile's SQLite queue
 
 export interface QueuedMutation {
-  id: string;              // UUID (clientMutationId)
+  id: string; // UUID (clientMutationId)
   table: string;
   operation: "CREATE" | "UPDATE" | "DELETE";
   payload: Record<string, unknown>;
@@ -28,7 +28,9 @@ export function saveQueue(queue: QueuedMutation[]): void {
   localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
 }
 
-export function addToQueue(mutation: Omit<QueuedMutation, "createdAt" | "retryCount">): void {
+export function addToQueue(
+  mutation: Omit<QueuedMutation, "createdAt" | "retryCount">,
+): void {
   const queue = getQueue();
   queue.push({
     ...mutation,
@@ -79,7 +81,9 @@ export function isOnline(): boolean {
 }
 
 // Listen to online/offline events
-export function onOnlineChange(callback: (online: boolean) => void): () => void {
+export function onOnlineChange(
+  callback: (online: boolean) => void,
+): () => void {
   const handleOnline = () => callback(true);
   const handleOffline = () => callback(false);
 

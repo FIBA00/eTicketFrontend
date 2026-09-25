@@ -20,7 +20,9 @@ export interface SyncResult {
   errors: string[];
 }
 
-export function onSyncComplete(listener: (result: SyncResult) => void): () => void {
+export function onSyncComplete(
+  listener: (result: SyncResult) => void,
+): () => void {
   syncListeners.push(listener);
   return () => {
     syncListeners = syncListeners.filter((l) => l !== listener);
@@ -34,7 +36,12 @@ function notifyListeners(result: SyncResult): void {
 export async function syncNow(): Promise<SyncResult> {
   // Prevent concurrent syncs
   if (syncInProgress) {
-    return { synced: 0, failed: 0, conflicts: 0, errors: ["Sync already in progress"] };
+    return {
+      synced: 0,
+      failed: 0,
+      conflicts: 0,
+      errors: ["Sync already in progress"],
+    };
   }
 
   if (!isOnline()) {
@@ -82,10 +89,12 @@ export async function syncNow(): Promise<SyncResult> {
 
         if (!res.ok) {
           const body = await res.json().catch(() => null);
-          throw new Error(body?.error?.message ?? `Sync failed (${res.status})`);
+          throw new Error(
+            body?.error?.message ?? `Sync failed (${res.status})`,
+          );
         }
 
-        const data = await res.json() as {
+        const data = (await res.json()) as {
           applied: Array<{ clientMutationId: string }>;
           conflicts: Array<{ clientMutationId: string; reason: string }>;
           rejected: Array<{ clientMutationId: string; reason: string }>;
@@ -116,7 +125,9 @@ export async function syncNow(): Promise<SyncResult> {
           if (retries >= MAX_RETRIES) {
             removeFromQueue(mutation.id);
             result.failed++;
-            result.errors.push(`Max retries: ${mutation.table}/${mutation.operation}`);
+            result.errors.push(
+              `Max retries: ${mutation.table}/${mutation.operation}`,
+            );
           }
         }
       }
@@ -137,7 +148,7 @@ async function pullUpdates(): Promise<void> {
     const res = await authFetch("/sync/pull?since=0&limit=100");
     if (!res.ok) return;
 
-    const data = await res.json() as {
+    const data = (await res.json()) as {
       mutations: Array<{
         id: string;
         table: string;
@@ -170,11 +181,14 @@ export function initAutoSync(): () => void {
   });
 
   // Also sync periodically (every 5 minutes)
-  const interval = setInterval(() => {
-    if (isOnline() && getQueue().length > 0) {
-      syncNow();
-    }
-  }, 5 * 60 * 1000);
+  const interval = setInterval(
+    () => {
+      if (isOnline() && getQueue().length > 0) {
+        syncNow();
+      }
+    },
+    5 * 60 * 1000,
+  );
 
   return () => {
     unsubscribe();
@@ -214,7 +228,12 @@ export function queueTicketIssue(ticketData: {
 // Get sync status for UI
 export async function getSyncStatus(): Promise<{
   queueLength: number;
-  serverStatus?: { pending: number; applied: number; conflicts: number; rejected: number };
+  serverStatus?: {
+    pending: number;
+    applied: number;
+    conflicts: number;
+    rejected: number;
+  };
 }> {
   const queueLength = getQueue().length;
 

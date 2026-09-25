@@ -3,6 +3,7 @@
 ## Local development
 
 ### Prerequisites
+
 - Node.js 20+
 - pnpm (frontend) / npm (backend)
 - Docker + Docker Compose
@@ -16,6 +17,7 @@ docker compose -f infra/docker-compose.yml up -d db redis
 ```
 
 This starts:
+
 - PostgreSQL on :5432
 - Redis on :6379
 
@@ -28,6 +30,7 @@ cp .env.example .env
 ```
 
 `.env`:
+
 ```
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/eticket"
 JWT_SECRET="your-secret-here-min-16-chars"
@@ -67,6 +70,7 @@ pnpm dev
 ### Step 6: Login
 
 Open frontend, login with:
+
 - `admin / admin123` (full access)
 - `ticketer1 / ticketer123` (ticketing only)
 
@@ -75,6 +79,7 @@ Open frontend, login with:
 ### Backend
 
 1. **Environment**
+
    ```bash
    NODE_ENV=production
    JWT_SECRET=<strong-random-32-chars>
@@ -83,12 +88,14 @@ Open frontend, login with:
    ```
 
 2. **Build**
+
    ```bash
    npm run build
    npm run db:deploy  # Apply migrations
    ```
 
 3. **Run**
+
    ```bash
    npm start
    # Or with PM2:
@@ -118,12 +125,14 @@ Open frontend, login with:
 ### Frontend
 
 1. **Build**
+
    ```bash
    pnpm build
    # Output: dist/public/
    ```
 
 2. **Serve**
+
    ```nginx
    server {
      listen 80;

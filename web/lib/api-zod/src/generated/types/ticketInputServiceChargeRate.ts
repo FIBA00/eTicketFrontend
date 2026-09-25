@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type TicketInputServiceChargeRate = typeof TicketInputServiceChargeRate[keyof typeof TicketInputServiceChargeRate];
-
+export type TicketInputServiceChargeRate =
+  (typeof TicketInputServiceChargeRate)[keyof typeof TicketInputServiceChargeRate];
 
 export const TicketInputServiceChargeRate = {
-  '004': 0.04,
-  '005': 0.05,
+  "004": 0.04,
+  "005": 0.05,
 } as const;

@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { RefreshCw, Wifi, WifiOff, AlertTriangle, CheckCircle } from "lucide-react";
+import {
+  RefreshCw,
+  Wifi,
+  WifiOff,
+  AlertTriangle,
+  CheckCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -7,7 +13,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
-import { getSyncStatus, syncNow, onSyncComplete, type SyncResult } from "@/lib/sync-engine";
+import {
+  getSyncStatus,
+  syncNow,
+  onSyncComplete,
+  type SyncResult,
+} from "@/lib/sync-engine";
 import { getQueueLength, isOnline, onOnlineChange } from "@/lib/offline-queue";
 
 export function SyncStatus() {
@@ -137,13 +148,17 @@ export function SyncStatus() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Conflicts</span>
-                  <span className={serverStatus.conflicts > 0 ? "text-red-600" : ""}>
+                  <span
+                    className={serverStatus.conflicts > 0 ? "text-red-600" : ""}
+                  >
                     {serverStatus.conflicts}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Rejected</span>
-                  <span className={serverStatus.rejected > 0 ? "text-red-600" : ""}>
+                  <span
+                    className={serverStatus.rejected > 0 ? "text-red-600" : ""}
+                  >
                     {serverStatus.rejected}
                   </span>
                 </div>
@@ -159,9 +174,7 @@ export function SyncStatus() {
                 {lastResult.errors.length === 0 ? (
                   <>
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span>
-                      Synced {lastResult.synced} items
-                    </span>
+                    <span>Synced {lastResult.synced} items</span>
                   </>
                 ) : (
                   <>

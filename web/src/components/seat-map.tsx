@@ -10,7 +10,13 @@ interface SeatMapProps {
   disabled?: boolean;
 }
 
-export function SeatMap({ seats, selectedSeat, onSelectSeat, capacity, disabled }: SeatMapProps) {
+export function SeatMap({
+  seats,
+  selectedSeat,
+  onSelectSeat,
+  capacity,
+  disabled,
+}: SeatMapProps) {
   // Group seats into rows of 4 (2x2 layout typical for buses)
   const seatsPerRow = 4;
   const rows: SeatMapEntry[][] = [];
@@ -103,10 +109,13 @@ function SeatButton({
       disabled={isTaken || disabled}
       className={cn(
         "flex h-10 w-10 flex-col items-center justify-center rounded-md border-2 text-xs font-medium transition-colors",
-        isTaken && "cursor-not-allowed border-muted bg-muted text-muted-foreground",
-        !isTaken && !isSelected && "border-primary/30 bg-background hover:border-primary hover:bg-primary/5",
+        isTaken &&
+          "cursor-not-allowed border-muted bg-muted text-muted-foreground",
+        !isTaken &&
+          !isSelected &&
+          "border-primary/30 bg-background hover:border-primary hover:bg-primary/5",
         isSelected && "border-primary bg-primary text-primary-foreground",
-        disabled && !isTaken && "cursor-not-allowed opacity-50"
+        disabled && !isTaken && "cursor-not-allowed opacity-50",
       )}
     >
       <Armchair className="h-3 w-3 mb-0.5" />

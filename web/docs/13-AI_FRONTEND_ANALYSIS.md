@@ -3,6 +3,7 @@
 ## What the AI built
 
 The AI-generated frontend is a working MVP with:
+
 - React 18 + Vite + Tailwind CSS + shadcn/ui
 - TanStack Query (React Query) for data fetching
 - Wouter for routing
@@ -13,13 +14,13 @@ The AI-generated frontend is a working MVP with:
 
 ## Pages
 
-| Route | Component | Purpose |
-|-------|-----------|---------|
-| / | HomePage | Station overview, metrics |
-| /ticketing | TicketingPage | Issue new tickets |
-| /tickets | TicketsPage | Ticket register/list |
-| /revenue | RevenuePage | Revenue & settlement |
-| /settings | SettingsPage | Station settings |
+| Route      | Component     | Purpose                   |
+| ---------- | ------------- | ------------------------- |
+| /          | HomePage      | Station overview, metrics |
+| /ticketing | TicketingPage | Issue new tickets         |
+| /tickets   | TicketsPage   | Ticket register/list      |
+| /revenue   | RevenuePage   | Revenue & settlement      |
+| /settings  | SettingsPage  | Station settings          |
 
 ## Strengths
 
@@ -45,19 +46,19 @@ The AI-generated frontend is a working MVP with:
 ```typescript
 // AI ticket table
 ticketsTable = pgTable("transit_tickets", {
-  id: text("id").primaryKey(),           // client-generated UUID
+  id: text("id").primaryKey(), // client-generated UUID
   routeId: text("route_id"),
-  origin: text("origin"),                // denormalized
-  destination: text("destination"),      // denormalized
+  origin: text("origin"), // denormalized
+  destination: text("destination"), // denormalized
   distanceKm: numeric("distance_km"),
-  fareETB: numeric("fare_etb"),          // float!
+  fareETB: numeric("fare_etb"), // float!
   serviceChargeRate: numeric("service_charge_rate"),
   serviceChargeETB: numeric("service_charge_etb"),
   vatETB: numeric("vat_etb"),
   stationFeeETB: numeric("station_fee_etb"),
   totalETB: numeric("total_etb"),
   ticketerCommissionETB: numeric("ticketer_commission_etb"),
-  vehiclePlate: text("vehicle_plate"),   // denormalized
+  vehiclePlate: text("vehicle_plate"), // denormalized
   issuedAt: timestamp("issued_at"),
   createdAt: timestamp("created_at"),
 });
@@ -77,7 +78,7 @@ tickets = pgTable("tickets", {
   seatNumber: integer("seat_number"),
   departureDate: timestamp("departure_date"),
   status: ticketStatusEnum("status"),
-  fareCents: integer("fare_cents"),           // integer!
+  fareCents: integer("fare_cents"), // integer!
   serviceChargeCents: integer("service_charge_cents"),
   stationFeeCents: integer("station_fee_cents"),
   vatCents: integer("vat_cents"),
@@ -96,12 +97,14 @@ tickets = pgTable("tickets", {
 ## Integration strategy
 
 Keep the AI frontend's:
+
 - UI components (shadcn)
 - Offline queue pattern
 - Page layouts
 - OpenAPI client generation
 
 Replace/Add:
+
 - Authentication (done)
 - API endpoints to match v2 backend
 - Data fetching from v2 endpoints

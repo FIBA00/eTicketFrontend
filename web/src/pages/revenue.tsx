@@ -1,9 +1,21 @@
 import { useState } from "react";
-import { Calendar, Download, RefreshCw, TrendingUp, Wallet } from "lucide-react";
+import {
+  Calendar,
+  Download,
+  RefreshCw,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -33,11 +45,15 @@ export default function RevenuePage() {
   const isAdmin = hasRole("SYSTEM_ADMIN", "STATION_CONTROLLER");
   const isTicketer = hasRole("TICKETER");
 
-  const [auditDate, setAuditDate] = useState(new Date().toISOString().split("T")[0]);
-  const [revenueStart, setRevenueStart] = useState(
-    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+  const [auditDate, setAuditDate] = useState(
+    new Date().toISOString().split("T")[0],
   );
-  const [revenueEnd, setRevenueEnd] = useState(new Date().toISOString().split("T")[0]);
+  const [revenueStart, setRevenueStart] = useState(
+    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+  );
+  const [revenueEnd, setRevenueEnd] = useState(
+    new Date().toISOString().split("T")[0],
+  );
 
   // Data fetching
   const { data: todayAudit, refetch: refetchAudit } = useDailyAudit(auditDate);
@@ -99,11 +115,16 @@ export default function RevenuePage() {
         </div>
       </div>
 
-      <Tabs defaultValue={isTicketer ? "commission" : "overview"} className="space-y-4">
+      <Tabs
+        defaultValue={isTicketer ? "commission" : "overview"}
+        className="space-y-4"
+      >
         <TabsList>
           {isAdmin && <TabsTrigger value="overview">Overview</TabsTrigger>}
           {isAdmin && <TabsTrigger value="audits">Daily Audits</TabsTrigger>}
-          {isTicketer && <TabsTrigger value="commission">My Commission</TabsTrigger>}
+          {isTicketer && (
+            <TabsTrigger value="commission">My Commission</TabsTrigger>
+          )}
           {isAdmin && <TabsTrigger value="revenue">Revenue Report</TabsTrigger>}
         </TabsList>
 
@@ -116,7 +137,9 @@ export default function RevenuePage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Daily Audit</CardTitle>
-                    <CardDescription>Generate or view daily summary</CardDescription>
+                    <CardDescription>
+                      Generate or view daily summary
+                    </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     <Input
@@ -146,7 +169,8 @@ export default function RevenuePage() {
                   <AuditSummary audit={todayAudit} />
                 ) : (
                   <p className="text-muted-foreground text-center py-8">
-                    No audit generated for this date. Click Generate to create one.
+                    No audit generated for this date. Click Generate to create
+                    one.
                   </p>
                 )}
               </CardContent>
@@ -161,17 +185,29 @@ export default function RevenuePage() {
               />
               <StatCard
                 title="Total Revenue"
-                value={todayAudit ? `${formatCents(todayAudit.totalRevenueCents)} ETB` : "—"}
+                value={
+                  todayAudit
+                    ? `${formatCents(todayAudit.totalRevenueCents)} ETB`
+                    : "—"
+                }
                 icon={<TrendingUp className="h-4 w-4" />}
               />
               <StatCard
                 title="Net Revenue"
-                value={todayAudit ? `${formatCents(todayAudit.netRevenueCents)} ETB` : "—"}
+                value={
+                  todayAudit
+                    ? `${formatCents(todayAudit.netRevenueCents)} ETB`
+                    : "—"
+                }
                 icon={<Wallet className="h-4 w-4" />}
               />
               <StatCard
                 title="Commission Paid"
-                value={todayAudit ? `${formatCents(todayAudit.totalCommissionCents)} ETB` : "—"}
+                value={
+                  todayAudit
+                    ? `${formatCents(todayAudit.totalCommissionCents)} ETB`
+                    : "—"
+                }
                 icon={<Download className="h-4 w-4" />}
               />
             </div>
@@ -229,9 +265,14 @@ export default function RevenuePage() {
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardDescription>Total Commission (This Week)</CardDescription>
+                  <CardDescription>
+                    Total Commission (This Week)
+                  </CardDescription>
                   <CardTitle className="text-2xl">
-                    {commission ? formatCents(commission.totalCommissionCents) : "0.00"} ETB
+                    {commission
+                      ? formatCents(commission.totalCommissionCents)
+                      : "0.00"}{" "}
+                    ETB
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -245,7 +286,10 @@ export default function RevenuePage() {
                 <CardHeader className="pb-2">
                   <CardDescription>Already Withdrawn</CardDescription>
                   <CardTitle className="text-2xl">
-                    {commission ? formatCents(commission.alreadyWithdrawnCents) : "0.00"} ETB
+                    {commission
+                      ? formatCents(commission.alreadyWithdrawnCents)
+                      : "0.00"}{" "}
+                    ETB
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -257,7 +301,10 @@ export default function RevenuePage() {
                 <CardHeader className="pb-2">
                   <CardDescription>Available to Withdraw</CardDescription>
                   <CardTitle className="text-2xl text-green-600">
-                    {commission ? formatCents(commission.availableCents) : "0.00"} ETB
+                    {commission
+                      ? formatCents(commission.availableCents)
+                      : "0.00"}{" "}
+                    ETB
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -293,9 +340,14 @@ export default function RevenuePage() {
                   <div className="flex items-end">
                     <Button
                       onClick={handleWithdraw}
-                      disabled={requestWithdrawal.isPending || !commission?.availableCents}
+                      disabled={
+                        requestWithdrawal.isPending ||
+                        !commission?.availableCents
+                      }
                     >
-                      {requestWithdrawal.isPending ? "Requesting..." : "Request Withdrawal"}
+                      {requestWithdrawal.isPending
+                        ? "Requesting..."
+                        : "Request Withdrawal"}
                     </Button>
                   </div>
                 </div>
@@ -331,7 +383,8 @@ export default function RevenuePage() {
                             {formatCents(w.amountCents)} ETB
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            Week of {new Date(w.weekStartDate).toLocaleDateString()}
+                            Week of{" "}
+                            {new Date(w.weekStartDate).toLocaleDateString()}
                           </p>
                         </div>
                         <span
@@ -339,10 +392,10 @@ export default function RevenuePage() {
                             w.status === "PAID"
                               ? "bg-green-100 text-green-700"
                               : w.status === "APPROVED"
-                              ? "bg-blue-100 text-blue-700"
-                              : w.status === "REJECTED"
-                              ? "bg-red-100 text-red-700"
-                              : "bg-yellow-100 text-yellow-700"
+                                ? "bg-blue-100 text-blue-700"
+                                : w.status === "REJECTED"
+                                  ? "bg-red-100 text-red-700"
+                                  : "bg-yellow-100 text-yellow-700"
                           }`}
                         >
                           {w.status}
@@ -393,20 +446,28 @@ export default function RevenuePage() {
                     {/* Summary */}
                     <div className="grid gap-4 md:grid-cols-3">
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm text-muted-foreground">Total Revenue</p>
+                        <p className="text-sm text-muted-foreground">
+                          Total Revenue
+                        </p>
                         <p className="text-2xl font-bold">
                           {formatCents(revenue.totalRevenueCents)} ETB
                         </p>
                       </div>
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm text-muted-foreground">Net Revenue</p>
+                        <p className="text-sm text-muted-foreground">
+                          Net Revenue
+                        </p>
                         <p className="text-2xl font-bold text-green-600">
                           {formatCents(revenue.netRevenueCents)} ETB
                         </p>
                       </div>
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm text-muted-foreground">Total Tickets</p>
-                        <p className="text-2xl font-bold">{revenue.totalTickets}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Total Tickets
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {revenue.totalTickets}
+                        </p>
                       </div>
                     </div>
 
@@ -450,19 +511,27 @@ function AuditSummary({ audit }: { audit: DailyAudit }) {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Base Fare Total</span>
-            <span className="font-mono">{formatCents(audit.totalFareCents)} ETB</span>
+            <span className="font-mono">
+              {formatCents(audit.totalFareCents)} ETB
+            </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Service Charges</span>
-            <span className="font-mono">{formatCents(audit.totalServiceChargeCents)} ETB</span>
+            <span className="font-mono">
+              {formatCents(audit.totalServiceChargeCents)} ETB
+            </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">VAT Collected</span>
-            <span className="font-mono">{formatCents(audit.totalVatCents)} ETB</span>
+            <span className="font-mono">
+              {formatCents(audit.totalVatCents)} ETB
+            </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Station Fees</span>
-            <span className="font-mono">{formatCents(audit.totalStationFeeCents)} ETB</span>
+            <span className="font-mono">
+              {formatCents(audit.totalStationFeeCents)} ETB
+            </span>
           </div>
         </div>
         <div className="space-y-2">
@@ -474,7 +543,9 @@ function AuditSummary({ audit }: { audit: DailyAudit }) {
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Commission Paid</span>
-            <span className="font-mono">{formatCents(audit.totalCommissionCents)} ETB</span>
+            <span className="font-mono">
+              {formatCents(audit.totalCommissionCents)} ETB
+            </span>
           </div>
           <Separator />
           <div className="flex justify-between font-medium">

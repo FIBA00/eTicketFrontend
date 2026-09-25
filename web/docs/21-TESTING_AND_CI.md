@@ -46,13 +46,13 @@ docker exec -it postgres createdb -U postgres eticket_test
 
 ### Coverage Targets
 
-| Module | Target | Current |
-|--------|--------|---------|
-| Money calculation | 100% | ✅ |
-| Auth | 90%+ | 📝 |
-| Tickets | 90%+ | 📝 |
-| Finance | 80%+ | ⏳ |
-| Sync | 80%+ | ⏳ |
+| Module            | Target | Current |
+| ----------------- | ------ | ------- |
+| Money calculation | 100%   | ✅      |
+| Auth              | 90%+   | 📝      |
+| Tickets           | 90%+   | 📝      |
+| Finance           | 80%+   | ⏳      |
+| Sync              | 80%+   | ⏳      |
 
 ## Frontend Tests
 
@@ -131,7 +131,11 @@ import { createTestUser, generateTestToken } from "./helpers";
 describe("New Feature", () => {
   it("should do something", async () => {
     const user = await createTestUser();
-    const token = generateTestToken({ userId: user.id, role: "TICKETER", stationId: null });
+    const token = generateTestToken({
+      userId: user.id,
+      role: "TICKETER",
+      stationId: null,
+    });
 
     const res = await request(app)
       .post("/api/v1/endpoint")
@@ -180,10 +184,10 @@ Before deploying, verify:
 
 ## Future Testing Needs
 
-| Area | Priority | Effort |
-|------|----------|--------|
-| E2E tests (Playwright) | High | 1 week |
-| Mobile app tests (Detox) | Medium | 1 week |
-| Load testing (k6) | Medium | 3 days |
-| Security testing (OWASP) | High | 1 week |
-| Accessibility testing | Low | 3 days |
+| Area                     | Priority | Effort |
+| ------------------------ | -------- | ------ |
+| E2E tests (Playwright)   | High     | 1 week |
+| Mobile app tests (Detox) | Medium   | 1 week |
+| Load testing (k6)        | Medium   | 3 days |
+| Security testing (OWASP) | High     | 1 week |
+| Accessibility testing    | Low      | 3 days |

@@ -10,7 +10,11 @@ export default function PublicDisplayPage() {
   const params = useParams<{ stationId: string }>();
   const stationId = params.stationId ?? "";
 
-  const { data: display, isLoading, error } = usePublicStationDisplay(stationId);
+  const {
+    data: display,
+    isLoading,
+    error,
+  } = usePublicStationDisplay(stationId);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Update clock every second
@@ -51,10 +55,18 @@ export default function PublicDisplayPage() {
         </div>
         <div className="text-right">
           <p className="text-5xl font-mono font-bold">
-            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {currentTime.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </p>
           <p className="mt-1 text-gray-400">
-            {currentTime.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            {currentTime.toLocaleDateString([], {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
         </div>
       </div>
@@ -80,7 +92,9 @@ export default function PublicDisplayPage() {
       {/* Arriving Soon */}
       {display.incoming.length > 0 && (
         <div className="mb-8">
-          <h2 className="mb-4 text-2xl font-semibold text-blue-400">ARRIVING SOON</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-blue-400">
+            ARRIVING SOON
+          </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {display.incoming.map((vehicle) => (
               <BoardingCard key={vehicle.id} vehicle={vehicle} />
@@ -92,7 +106,9 @@ export default function PublicDisplayPage() {
       {/* Departed */}
       {display.departed.length > 0 && (
         <div>
-          <h2 className="mb-4 text-xl font-semibold text-gray-400">RECENTLY DEPARTED</h2>
+          <h2 className="mb-4 text-xl font-semibold text-gray-400">
+            RECENTLY DEPARTED
+          </h2>
           <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-5">
             {display.departed.map((vehicle) => (
               <DepartedCard key={vehicle.id} vehicle={vehicle} />
@@ -103,7 +119,9 @@ export default function PublicDisplayPage() {
 
       {/* Footer */}
       <div className="mt-8 border-t border-gray-700 pt-4 text-center text-gray-500">
-        <p>Last updated: {new Date(display.lastUpdated).toLocaleTimeString()}</p>
+        <p>
+          Last updated: {new Date(display.lastUpdated).toLocaleTimeString()}
+        </p>
       </div>
     </div>
   );
@@ -126,7 +144,9 @@ function BoardingCard({
 }) {
   const departureTime = new Date(vehicle.departureTime);
   const now = new Date();
-  const diffMinutes = Math.round((departureTime.getTime() - now.getTime()) / (1000 * 60));
+  const diffMinutes = Math.round(
+    (departureTime.getTime() - now.getTime()) / (1000 * 60),
+  );
 
   return (
     <div
@@ -138,7 +158,9 @@ function BoardingCard({
     >
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <p className={`font-mono font-bold ${large ? "text-4xl" : "text-2xl"}`}>
+          <p
+            className={`font-mono font-bold ${large ? "text-4xl" : "text-2xl"}`}
+          >
             {vehicle.plateNumber}
           </p>
           <p className="text-gray-400">{vehicle.type}</p>
@@ -161,7 +183,10 @@ function BoardingCard({
         <div className="flex items-center gap-2">
           <Clock className="h-4 w-4" />
           <span className="font-mono">
-            {departureTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {departureTime.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </span>
           {vehicle.status === "ARRIVING" && diffMinutes > 0 && (
             <span className="text-blue-400">({diffMinutes} min)</span>
@@ -174,8 +199,8 @@ function BoardingCard({
               vehicle.availableSeats === 0
                 ? "text-red-400"
                 : vehicle.availableSeats < 5
-                ? "text-orange-400"
-                : "text-green-400"
+                  ? "text-orange-400"
+                  : "text-green-400"
             }`}
           >
             {vehicle.availableSeats}
@@ -203,7 +228,10 @@ function DepartedCard({
         {vehicle.route.origin} → {vehicle.route.destination}
       </p>
       <p className="mt-1 text-xs text-gray-500">
-        {new Date(vehicle.departureTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {new Date(vehicle.departureTime).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
       </p>
     </div>
   );

@@ -125,46 +125,77 @@ export default function RoutesPage() {
   }
 
   const columns = [
-    { key: "route", header: "Route", render: (r: Route) => (
-      <div className="flex items-center gap-2">
-        <span className="font-medium">{r.originStation?.name ?? r.originStationId}</span>
-        <ArrowRight className="h-4 w-4 text-muted-foreground" />
-        <span className="font-medium">{r.destinationStation?.name ?? r.destinationStationId}</span>
-      </div>
-    )},
-    { key: "distance", header: "Distance", render: (r: Route) => `${r.distanceKm} km` },
-    { key: "fare", header: "Base Fare", render: (r: Route) => (
-      <span className="font-mono">{formatCents(r.baseFareCents)} ETB</span>
-    )},
-    { key: "duration", header: "Duration", render: (r: Route) =>
-      r.estimatedMinutes ? `${r.estimatedMinutes} min` : "—"
-    },
-    { key: "status", header: "Status", render: (r: Route) => (
-      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-        r.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-      }`}>
-        {r.isActive ? "Active" : "Inactive"}
-      </span>
-    )},
-    ...(canEdit ? [{
-      key: "actions",
-      header: "",
+    {
+      key: "route",
+      header: "Route",
       render: (r: Route) => (
-        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" onClick={() => openEdit(r)}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setDeletingRoute(r)}
-            className="text-destructive hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center gap-2">
+          <span className="font-medium">
+            {r.originStation?.name ?? r.originStationId}
+          </span>
+          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+          <span className="font-medium">
+            {r.destinationStation?.name ?? r.destinationStationId}
+          </span>
         </div>
       ),
-    }] : []),
+    },
+    {
+      key: "distance",
+      header: "Distance",
+      render: (r: Route) => `${r.distanceKm} km`,
+    },
+    {
+      key: "fare",
+      header: "Base Fare",
+      render: (r: Route) => (
+        <span className="font-mono">{formatCents(r.baseFareCents)} ETB</span>
+      ),
+    },
+    {
+      key: "duration",
+      header: "Duration",
+      render: (r: Route) =>
+        r.estimatedMinutes ? `${r.estimatedMinutes} min` : "—",
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (r: Route) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+            r.isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          {r.isActive ? "Active" : "Inactive"}
+        </span>
+      ),
+    },
+    ...(canEdit
+      ? [
+          {
+            key: "actions",
+            header: "",
+            render: (r: Route) => (
+              <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                <Button variant="ghost" size="icon" onClick={() => openEdit(r)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDeletingRoute(r)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -172,9 +203,7 @@ export default function RoutesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Routes</h1>
-          <p className="text-muted-foreground">
-            Manage bus routes and fares
-          </p>
+          <p className="text-muted-foreground">Manage bus routes and fares</p>
         </div>
         {canEdit && (
           <Button onClick={openCreate}>
@@ -210,17 +239,21 @@ export default function RoutesPage() {
                 <Label>Origin Station *</Label>
                 <Select
                   value={form.originStationId}
-                  onValueChange={(v) => setForm({ ...form, originStationId: v })}
+                  onValueChange={(v) =>
+                    setForm({ ...form, originStationId: v })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select origin" />
                   </SelectTrigger>
                   <SelectContent>
-                    {stations?.filter((s) => s.isActive).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name} ({s.code})
-                      </SelectItem>
-                    ))}
+                    {stations
+                      ?.filter((s) => s.isActive)
+                      .map((s) => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {s.name} ({s.code})
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -228,17 +261,21 @@ export default function RoutesPage() {
                 <Label>Destination Station *</Label>
                 <Select
                   value={form.destinationStationId}
-                  onValueChange={(v) => setForm({ ...form, destinationStationId: v })}
+                  onValueChange={(v) =>
+                    setForm({ ...form, destinationStationId: v })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select destination" />
                   </SelectTrigger>
                   <SelectContent>
-                    {stations?.filter((s) => s.isActive).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name} ({s.code})
-                      </SelectItem>
-                    ))}
+                    {stations
+                      ?.filter((s) => s.isActive)
+                      .map((s) => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {s.name} ({s.code})
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -252,7 +289,9 @@ export default function RoutesPage() {
                   step="0.1"
                   min="0"
                   value={form.distanceKm}
-                  onChange={(e) => setForm({ ...form, distanceKm: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, distanceKm: e.target.value })
+                  }
                   placeholder="90"
                   required
                 />
@@ -265,7 +304,9 @@ export default function RoutesPage() {
                   step="0.01"
                   min="0"
                   value={form.baseFareCents}
-                  onChange={(e) => setForm({ ...form, baseFareCents: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, baseFareCents: e.target.value })
+                  }
                   placeholder="200.00"
                   required
                 />
@@ -277,7 +318,9 @@ export default function RoutesPage() {
                   type="number"
                   min="0"
                   value={form.estimatedMinutes}
-                  onChange={(e) => setForm({ ...form, estimatedMinutes: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, estimatedMinutes: e.target.value })
+                  }
                   placeholder="90"
                 />
               </div>
@@ -290,13 +333,22 @@ export default function RoutesPage() {
             )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={createRoute.isPending || updateRoute.isPending}>
+              <Button
+                type="submit"
+                disabled={createRoute.isPending || updateRoute.isPending}
+              >
                 {createRoute.isPending || updateRoute.isPending
                   ? "Saving..."
-                  : editingRoute ? "Update" : "Create"}
+                  : editingRoute
+                    ? "Update"
+                    : "Create"}
               </Button>
             </DialogFooter>
           </form>

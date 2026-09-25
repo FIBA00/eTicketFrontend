@@ -6,8 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export * from './healthStatus';
-export * from './ticket';
-export * from './ticketInput';
-export * from './ticketInputServiceChargeRate';
-export * from './ticketSummary';
+export * from "./healthStatus";
+export * from "./ticket";
+export * from "./ticketInput";
+export * from "./ticketInputServiceChargeRate";
+export * from "./ticketSummary";

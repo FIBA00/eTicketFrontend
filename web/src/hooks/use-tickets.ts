@@ -194,10 +194,10 @@ export function useVoidTicket() {
 
 export async function verifyTicket(
   ticketNumber: string,
-  qrHash: string
+  qrHash: string,
 ): Promise<VerifyResult> {
   const res = await authFetch(
-    `/tickets/verify/${ticketNumber}?hash=${encodeURIComponent(qrHash)}`
+    `/tickets/verify/${ticketNumber}?hash=${encodeURIComponent(qrHash)}`,
   );
   if (!res.ok) {
     return { valid: false, message: "Verification failed" };

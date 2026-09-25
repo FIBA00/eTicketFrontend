@@ -72,7 +72,9 @@ export function useStations() {
 export function useCreateStation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: Omit<Station, "id" | "createdAt" | "updatedAt" | "isActive">) => {
+    mutationFn: async (
+      data: Omit<Station, "id" | "createdAt" | "updatedAt" | "isActive">,
+    ) => {
       const res = await authFetch("/stations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

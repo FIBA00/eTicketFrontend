@@ -1,6 +1,7 @@
 # Backend v2 Details
 
 ## Stack
+
 - Express 4 + TypeScript
 - Drizzle ORM (plain TS schema)
 - PostgreSQL
@@ -54,18 +55,25 @@ e-ticket-v2/
 ## Key patterns
 
 ### Module pattern
+
 Each module is a self-contained route file:
+
 ```typescript
 // modules/users/users.routes.ts
 export const usersRouter = Router();
 usersRouter.use(requireAuth);
 
-usersRouter.get("/", requireRole(Role.SYSTEM_ADMIN), asyncHandler(async (req, res) => {
-  // handler
-}));
+usersRouter.get(
+  "/",
+  requireRole(Role.SYSTEM_ADMIN),
+  asyncHandler(async (req, res) => {
+    // handler
+  }),
+);
 ```
 
 ### Error handling
+
 ```typescript
 // Custom error class
 export class AppError extends Error {
@@ -73,8 +81,10 @@ export class AppError extends Error {
     public statusCode: number,
     public code: string,
     message: string,
-    public details?: unknown
-  ) { super(message); }
+    public details?: unknown,
+  ) {
+    super(message);
+  }
 }
 
 // Async handler wrapper
@@ -86,7 +96,7 @@ export const asyncHandler = (fn) => (req, res, next) => {
 export function errorHandler(err, req, res, _next) {
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
-      error: { code: err.code, message: err.message, details: err.details }
+      error: { code: err.code, message: err.message, details: err.details },
     });
     return;
   }
@@ -95,6 +105,7 @@ export function errorHandler(err, req, res, _next) {
 ```
 
 ### Validation
+
 ```typescript
 // Zod schema from shared package
 import { createUserSchema } from "@e-ticket/shared-types";
@@ -111,12 +122,17 @@ export const validate = (schema: ZodSchema) => (req, _res, next) => {
 };
 
 // Usage
-usersRouter.post("/", validate(createUserSchema), asyncHandler(async (req, res) => {
-  // req.body is now typed and validated
-}));
+usersRouter.post(
+  "/",
+  validate(createUserSchema),
+  asyncHandler(async (req, res) => {
+    // req.body is now typed and validated
+  }),
+);
 ```
 
 ### Auth middleware
+
 ```typescript
 // requireAuth — verifies JWT, attaches req.user
 export function requireAuth(req, _res, next) {
@@ -136,7 +152,10 @@ export function requireAuth(req, _res, next) {
 // requireRole — restricts to specific roles
 export function requireRole(...roles: Role[]) {
   return (req, _res, next) => {
-    if (!req.user) { next(UnauthorizedError()); return; }
+    if (!req.user) {
+      next(UnauthorizedError());
+      return;
+    }
     if (!roles.includes(req.user.role)) {
       next(ForbiddenError(`Requires role: ${roles.join(" | ")}`));
       return;
@@ -150,17 +169,24 @@ export function requireRole(...roles: Role[]) {
 
 ```typescript
 // Table definition
-export const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  username: varchar("username", { length: 50 }).notNull().unique(),
-  // ...
-}, (t) => ({
-  usernameIdx: uniqueIndex("users_username_idx").on(t.username),
-}));
+export const users = pgTable(
+  "users",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    username: varchar("username", { length: 50 }).notNull().unique(),
+    // ...
+  },
+  (t) => ({
+    usernameIdx: uniqueIndex("users_username_idx").on(t.username),
+  }),
+);
 
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
-  station: one(stations, { fields: [users.stationId], references: [stations.id] }),
+  station: one(stations, {
+    fields: [users.stationId],
+    references: [stations.id],
+  }),
   ticketsIssued: many(tickets),
 }));
 ```

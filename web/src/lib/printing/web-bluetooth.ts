@@ -83,7 +83,7 @@ export class WebBluetoothPrinter {
 
       // Get write characteristic
       this.characteristic = await service.getCharacteristic(
-        PRINTER_CHARACTERISTIC_UUID
+        PRINTER_CHARACTERISTIC_UUID,
       );
 
       // Handle disconnect

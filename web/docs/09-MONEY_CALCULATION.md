@@ -7,11 +7,13 @@ Location: `packages/money/`
 ## Why integer cents?
 
 Floating point causes rounding errors:
+
 ```javascript
-0.1 + 0.2 === 0.30000000000000004  // true
+0.1 + 0.2 === 0.30000000000000004; // true
 ```
 
 For financial calculations, we use integer cents (1 ETB = 100 cents):
+
 ```typescript
 // 63.75 ETB = 6375 cents
 const totalCents = 6375;
@@ -21,8 +23,8 @@ const totalCents = 6375;
 
 ```typescript
 interface FareInput {
-  fareCents: number;      // Base fare in cents
-  distanceKm: number;     // Trip distance
+  fareCents: number; // Base fare in cents
+  distanceKm: number; // Trip distance
 }
 
 interface FareBreakdown {
@@ -46,16 +48,18 @@ function calcFareBreakdown(input: FareInput): FareBreakdown {
   // 2. Calculate each component (round half-up)
   const serviceChargeCents = Math.round(input.fareCents * scRate);
   const vatCents = Math.round(serviceChargeCents * 0.15);
-  const stationFeeCents = Math.round(serviceChargeCents * 0.10);
+  const stationFeeCents = Math.round(serviceChargeCents * 0.1);
   const commissionCents = Math.round(serviceChargeCents * 0.05);
 
   // 3. Sum for total
-  const totalCents = input.fareCents + serviceChargeCents + vatCents + stationFeeCents;
+  const totalCents =
+    input.fareCents + serviceChargeCents + vatCents + stationFeeCents;
 
   // 4. Platform keeps what's left
-  const netPlatformRevenueCents = serviceChargeCents - stationFeeCents - commissionCents;
+  const netPlatformRevenueCents =
+    serviceChargeCents - stationFeeCents - commissionCents;
 
-  return { /* ... */ };
+  return {/* ... */};
 }
 ```
 
@@ -85,21 +89,21 @@ const result = calcFareBreakdown({ fareCents: 20000, distanceKm: 120 });
 
 ```typescript
 // Format for display
-formatCents(6375);     // "63.75"
-formatCents(6000);     // "60.00"
-formatCents(45);       // "0.45"
+formatCents(6375); // "63.75"
+formatCents(6000); // "60.00"
+formatCents(45); // "0.45"
 
 // Parse from string
 parseToCents("63.75"); // 6375
-parseToCents("60");    // 6000
-parseToCents("abc");   // throws Error
+parseToCents("60"); // 6000
+parseToCents("abc"); // throws Error
 ```
 
 ## Commission calculation
 
 ```typescript
 // Ticketer gets 5% of SC per ticket
-calcCommission(300);   // 15 cents (0.15 ETB)
+calcCommission(300); // 15 cents (0.15 ETB)
 
 // Weekly withdrawal
 calcWeeklyWithdrawal(weeklyCommission, alreadyWithdrawn);

@@ -24,13 +24,17 @@ describe("DataTable Component", () => {
   });
 
   it("shows empty message when no data", () => {
-    render(<DataTable columns={columns} data={[]} emptyMessage="No stations" />);
+    render(
+      <DataTable columns={columns} data={[]} emptyMessage="No stations" />,
+    );
 
     expect(screen.getByText("No stations")).toBeInTheDocument();
   });
 
   it("shows loading skeleton", () => {
-    const { container } = render(<DataTable columns={columns} data={[]} isLoading />);
+    const { container } = render(
+      <DataTable columns={columns} data={[]} isLoading />,
+    );
 
     expect(container.querySelector(".animate-pulse")).toBeInTheDocument();
   });
@@ -53,7 +57,7 @@ describe("ConfirmDialog Component", () => {
         title="Delete Item"
         description="Are you sure?"
         onConfirm={() => {}}
-      />
+      />,
     );
 
     expect(screen.getByText("Delete Item")).toBeInTheDocument();
@@ -69,7 +73,7 @@ describe("ConfirmDialog Component", () => {
         title="Delete"
         description="Confirm?"
         onConfirm={onConfirm}
-      />
+      />,
     );
 
     fireEvent.click(screen.getByText("Delete"));
@@ -85,7 +89,7 @@ describe("ConfirmDialog Component", () => {
         description="Confirm?"
         onConfirm={() => {}}
         isLoading={true}
-      />
+      />,
     );
 
     expect(screen.getByText("Deleting...")).toBeInTheDocument();

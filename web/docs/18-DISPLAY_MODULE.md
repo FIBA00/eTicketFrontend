@@ -6,19 +6,19 @@ Real-time station display board showing vehicle arrivals, departures, and seat a
 
 ## Types of Display
 
-| Type | Route | Auth | Use Case |
-|------|-------|------|----------|
-| Internal | `/display` | Required | Staff dashboard view |
-| Public | `/display/public/:stationId` | None | TV/monitor at station |
+| Type     | Route                        | Auth     | Use Case              |
+| -------- | ---------------------------- | -------- | --------------------- |
+| Internal | `/display`                   | Required | Staff dashboard view  |
+| Public   | `/display/public/:stationId` | None     | TV/monitor at station |
 
 ## Backend Endpoints
 
-| Method | Path | Description | Auth |
-|--------|------|-------------|------|
-| GET | /display/stations | All stations with activity | Optional |
-| GET | /display/station/:id | Full display data for station | Optional |
-| GET | /display/my-station | Display for user's station | Required |
-| POST | /display/station/:id/refresh | Force refresh | Admin/Controller |
+| Method | Path                         | Description                   | Auth             |
+| ------ | ---------------------------- | ----------------------------- | ---------------- |
+| GET    | /display/stations            | All stations with activity    | Optional         |
+| GET    | /display/station/:id         | Full display data for station | Optional         |
+| GET    | /display/my-station          | Display for user's station    | Required         |
+| POST   | /display/station/:id/refresh | Force refresh                 | Admin/Controller |
 
 ## Vehicle Status Logic
 
@@ -71,19 +71,21 @@ Vehicle {
 
 ## Refresh Intervals
 
-| Context | Interval |
-|---------|----------|
+| Context          | Interval   |
+| ---------------- | ---------- |
 | Internal display | 30 seconds |
-| Public display | 15 seconds |
-| Station list | 60 seconds |
+| Public display   | 15 seconds |
+| Station list     | 60 seconds |
 
 ## Files
 
 ### Backend
+
 - `apps/api/src/modules/display/display.service.ts` — Data aggregation
 - `apps/api/src/modules/display/display.routes.ts` — Endpoints
 
 ### Frontend
+
 - `src/hooks/use-display.ts` — React Query hooks
 - `src/pages/display.tsx` — Internal display page
 - `src/pages/display-public.tsx` — Public TV display

@@ -7,6 +7,7 @@ Thermal printer integration for ticket receipts and daily summaries.
 ## Industry Standard: ESC/POS
 
 ESC/POS is the industry standard command set for thermal receipt printers. Used by:
+
 - Epson thermal printers
 - Generic Bluetooth thermal printers (58mm, 80mm)
 - POS systems (Sun Mi, etc.)
@@ -27,22 +28,22 @@ ESC/POS is the industry standard command set for thermal receipt printers. Used 
 
 ### Methods
 
-| Method | Browser | How |
-|--------|---------|-----|
+| Method            | Browser      | How                         |
+| ----------------- | ------------ | --------------------------- |
 | Web Bluetooth API | Chrome, Edge | Direct Bluetooth to printer |
-| Browser Print | All | System print dialog |
+| Browser Print     | All          | System print dialog         |
 
 ### Files
 
-| File | Purpose |
-|------|---------|
-| `src/lib/printing/types.ts` | Shared types |
-| `src/lib/printing/escpos.ts` | ESC/POS command generator |
+| File                                | Purpose                      |
+| ----------------------------------- | ---------------------------- |
+| `src/lib/printing/types.ts`         | Shared types                 |
+| `src/lib/printing/escpos.ts`        | ESC/POS command generator    |
 | `src/lib/printing/web-bluetooth.ts` | Web Bluetooth implementation |
-| `src/lib/printing/web-print.ts` | Browser print fallback |
-| `src/lib/printing/index.ts` | Unified print manager |
-| `src/components/print-dialog.tsx` | Print method selector dialog |
-| `src/components/print-button.tsx` | Reusable print button |
+| `src/lib/printing/web-print.ts`     | Browser print fallback       |
+| `src/lib/printing/index.ts`         | Unified print manager        |
+| `src/components/print-dialog.tsx`   | Print method selector dialog |
+| `src/components/print-button.tsx`   | Reusable print button        |
 
 ### Usage
 
@@ -70,17 +71,17 @@ import { PrintButton } from "@/components/print-button";
     ticketer: { name: "John Doe" },
     issuedAt: "2026-09-25T14:00:00Z",
   }}
-/>
+/>;
 ```
 
 ## Mobile Printing
 
 ### Files
 
-| File | Purpose |
-|------|---------|
-| `src/printing/escpos.ts` | ESC/POS generator (same as web) |
-| `src/printing/bluetooth.ts` | React Native Bluetooth wrapper |
+| File                        | Purpose                         |
+| --------------------------- | ------------------------------- |
+| `src/printing/escpos.ts`    | ESC/POS generator (same as web) |
+| `src/printing/bluetooth.ts` | React Native Bluetooth wrapper  |
 
 ### Native Module Required
 
@@ -149,24 +150,24 @@ Based on uploaded screenshot:
 
 ## Printer Compatibility
 
-| Printer Type | Connection | Paper |
-|--------------|------------|-------|
-| Generic Bluetooth | Bluetooth | 58mm, 80mm |
-| Sun Mi V2 | Built-in | 58mm |
-| USB Thermal | USB (web only) | 58mm, 80mm |
-| Network Printer | TCP/IP | 80mm |
+| Printer Type      | Connection     | Paper      |
+| ----------------- | -------------- | ---------- |
+| Generic Bluetooth | Bluetooth      | 58mm, 80mm |
+| Sun Mi V2         | Built-in       | 58mm       |
+| USB Thermal       | USB (web only) | 58mm, 80mm |
+| Network Printer   | TCP/IP         | 80mm       |
 
 ## ESC/POS Commands Used
 
-| Command | Hex | Purpose |
-|---------|-----|---------|
-| ESC @ | 1B 40 | Initialize |
-| ESC a | 1B 61 | Alignment (0=left, 1=center, 2=right) |
-| ESC E | 1B 45 | Bold on/off |
-| GS ! | 1D 21 | Double height/width |
-| GS V | 1D 56 | Cut paper |
-| ESC d | 1B 64 | Feed n lines |
-| LF | 0A | Line feed |
+| Command | Hex   | Purpose                               |
+| ------- | ----- | ------------------------------------- |
+| ESC @   | 1B 40 | Initialize                            |
+| ESC a   | 1B 61 | Alignment (0=left, 1=center, 2=right) |
+| ESC E   | 1B 45 | Bold on/off                           |
+| GS !    | 1D 21 | Double height/width                   |
+| GS V    | 1D 56 | Cut paper                             |
+| ESC d   | 1B 64 | Feed n lines                          |
+| LF      | 0A    | Line feed                             |
 
 ## Future Enhancements
 

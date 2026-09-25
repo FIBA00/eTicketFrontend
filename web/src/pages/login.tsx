@@ -46,9 +46,7 @@ export default function LoginPage() {
             </div>
           </div>
           <CardTitle className="text-2xl">Transit E-Ticket</CardTitle>
-          <CardDescription>
-            Sign in to your station account
-          </CardDescription>
+          <CardDescription>Sign in to your station account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

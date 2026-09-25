@@ -73,7 +73,7 @@ export default function VehiclesPage() {
     setEditingVehicle(null);
     setForm({
       ...emptyForm,
-      agentId: hasRole("AGENT") ? user?.id ?? "" : "",
+      agentId: hasRole("AGENT") ? (user?.id ?? "") : "",
       stationId: user?.stationId ?? "",
     });
     setError("");
@@ -128,43 +128,75 @@ export default function VehiclesPage() {
   }
 
   const columns = [
-    { key: "plate", header: "Plate", render: (v: Vehicle) => (
-      <span className="font-mono text-sm font-medium">{v.plateNumber}</span>
-    )},
-    { key: "type", header: "Type", render: (v: Vehicle) => (
-      <span className="inline-flex rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-        {v.type}
-      </span>
-    )},
-    { key: "capacity", header: "Capacity", render: (v: Vehicle) => `${v.capacity} seats` },
-    { key: "agent", header: "Agent", render: (v: Vehicle) => v.agent?.fullName ?? "—" },
-    { key: "station", header: "Station", render: (v: Vehicle) => v.station?.name ?? "—" },
-    { key: "status", header: "Status", render: (v: Vehicle) => (
-      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-        v.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-      }`}>
-        {v.isActive ? "Active" : "Inactive"}
-      </span>
-    )},
-    ...(canEdit ? [{
-      key: "actions",
-      header: "",
+    {
+      key: "plate",
+      header: "Plate",
       render: (v: Vehicle) => (
-        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" onClick={() => openEdit(v)}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setDeletingVehicle(v)}
-            className="text-destructive hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
+        <span className="font-mono text-sm font-medium">{v.plateNumber}</span>
       ),
-    }] : []),
+    },
+    {
+      key: "type",
+      header: "Type",
+      render: (v: Vehicle) => (
+        <span className="inline-flex rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+          {v.type}
+        </span>
+      ),
+    },
+    {
+      key: "capacity",
+      header: "Capacity",
+      render: (v: Vehicle) => `${v.capacity} seats`,
+    },
+    {
+      key: "agent",
+      header: "Agent",
+      render: (v: Vehicle) => v.agent?.fullName ?? "—",
+    },
+    {
+      key: "station",
+      header: "Station",
+      render: (v: Vehicle) => v.station?.name ?? "—",
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (v: Vehicle) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+            v.isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          {v.isActive ? "Active" : "Inactive"}
+        </span>
+      ),
+    },
+    ...(canEdit
+      ? [
+          {
+            key: "actions",
+            header: "",
+            render: (v: Vehicle) => (
+              <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                <Button variant="ghost" size="icon" onClick={() => openEdit(v)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDeletingVehicle(v)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -211,7 +243,9 @@ export default function VehiclesPage() {
                 <Input
                   id="plate"
                   value={form.plateNumber}
-                  onChange={(e) => setForm({ ...form, plateNumber: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, plateNumber: e.target.value })
+                  }
                   placeholder="e.g. ET-12345"
                   required
                 />
@@ -227,7 +261,9 @@ export default function VehiclesPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {VEHICLE_TYPES.map((t) => (
-                      <SelectItem key={t} value={t}>{t}</SelectItem>
+                      <SelectItem key={t} value={t}>
+                        {t}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -242,7 +278,9 @@ export default function VehiclesPage() {
                   min="4"
                   max="80"
                   value={form.capacity}
-                  onChange={(e) => setForm({ ...form, capacity: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, capacity: e.target.value })
+                  }
                   placeholder="50"
                   required
                 />
@@ -258,11 +296,13 @@ export default function VehiclesPage() {
                     <SelectValue placeholder="Select station" />
                   </SelectTrigger>
                   <SelectContent>
-                    {stations?.filter((s) => s.isActive).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name} ({s.code})
-                      </SelectItem>
-                    ))}
+                    {stations
+                      ?.filter((s) => s.isActive)
+                      .map((s) => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {s.name} ({s.code})
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -294,13 +334,22 @@ export default function VehiclesPage() {
             )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={createVehicle.isPending || updateVehicle.isPending}>
+              <Button
+                type="submit"
+                disabled={createVehicle.isPending || updateVehicle.isPending}
+              >
                 {createVehicle.isPending || updateVehicle.isPending
                   ? "Saving..."
-                  : editingVehicle ? "Update" : "Create"}
+                  : editingVehicle
+                    ? "Update"
+                    : "Create"}
               </Button>
             </DialogFooter>
           </form>

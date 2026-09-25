@@ -2,7 +2,11 @@ import { useState } from "react";
 import { Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrintDialog } from "./print-dialog";
-import { printManager, type PrintMethod, type PrintTicketData } from "@/lib/printing";
+import {
+  printManager,
+  type PrintMethod,
+  type PrintTicketData,
+} from "@/lib/printing";
 
 interface PrintButtonProps {
   ticketData: PrintTicketData;
@@ -10,7 +14,11 @@ interface PrintButtonProps {
   size?: "default" | "sm" | "lg";
 }
 
-export function PrintButton({ ticketData, variant = "outline", size = "default" }: PrintButtonProps) {
+export function PrintButton({
+  ticketData,
+  variant = "outline",
+  size = "default",
+}: PrintButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   async function handlePrint(method: PrintMethod): Promise<boolean> {

@@ -134,38 +134,54 @@ export default function StationsPage() {
   }
 
   const columns = [
-    { key: "code", header: "Code", render: (s: Station) => (
-      <span className="font-mono text-sm font-medium">{s.code}</span>
-    )},
+    {
+      key: "code",
+      header: "Code",
+      render: (s: Station) => (
+        <span className="font-mono text-sm font-medium">{s.code}</span>
+      ),
+    },
     { key: "name", header: "Name", render: (s: Station) => s.name },
     { key: "city", header: "City", render: (s: Station) => s.city },
     { key: "region", header: "Region", render: (s: Station) => s.region },
-    { key: "status", header: "Status", render: (s: Station) => (
-      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-        s.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-      }`}>
-        {s.isActive ? "Active" : "Inactive"}
-      </span>
-    )},
-    ...(canEdit ? [{
-      key: "actions",
-      header: "",
+    {
+      key: "status",
+      header: "Status",
       render: (s: Station) => (
-        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" onClick={() => openEdit(s)}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setDeletingStation(s)}
-            className="text-destructive hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
+        <span
+          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+            s.isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          {s.isActive ? "Active" : "Inactive"}
+        </span>
       ),
-    }] : []),
+    },
+    ...(canEdit
+      ? [
+          {
+            key: "actions",
+            header: "",
+            render: (s: Station) => (
+              <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                <Button variant="ghost" size="icon" onClick={() => openEdit(s)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDeletingStation(s)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -251,7 +267,9 @@ export default function StationsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {REGIONS.map((r) => (
-                      <SelectItem key={r} value={r}>{r}</SelectItem>
+                      <SelectItem key={r} value={r}>
+                        {r}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -265,7 +283,9 @@ export default function StationsPage() {
                   type="number"
                   step="any"
                   value={form.latitude}
-                  onChange={(e) => setForm({ ...form, latitude: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, latitude: e.target.value })
+                  }
                   placeholder="8.55"
                 />
               </div>
@@ -276,7 +296,9 @@ export default function StationsPage() {
                   type="number"
                   step="any"
                   value={form.longitude}
-                  onChange={(e) => setForm({ ...form, longitude: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, longitude: e.target.value })
+                  }
                   placeholder="39.27"
                 />
               </div>
@@ -289,13 +311,22 @@ export default function StationsPage() {
             )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={createStation.isPending || updateStation.isPending}>
+              <Button
+                type="submit"
+                disabled={createStation.isPending || updateStation.isPending}
+              >
                 {createStation.isPending || updateStation.isPending
                   ? "Saving..."
-                  : editingStation ? "Update" : "Create"}
+                  : editingStation
+                    ? "Update"
+                    : "Create"}
               </Button>
             </DialogFooter>
           </form>

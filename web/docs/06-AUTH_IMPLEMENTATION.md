@@ -2,16 +2,16 @@
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `apps/api/src/modules/auth/auth.routes.ts` | Backend: login, refresh, logout endpoints |
-| `apps/api/src/shared/middleware/auth.ts` | Backend: JWT sign/verify, requireAuth, requireRole |
-| `apps/api/src/db/schema.ts` | Backend: users, refresh_tokens tables |
-| `artifacts/transit-eticket/src/lib/auth.ts` | Frontend: token storage, API calls, authFetch wrapper |
-| `artifacts/transit-eticket/src/hooks/use-auth.tsx` | Frontend: React context, session restore |
-| `artifacts/transit-eticket/src/pages/login.tsx` | Frontend: login page |
-| `artifacts/transit-eticket/src/components/protected-route.tsx` | Frontend: route guard |
-| `artifacts/transit-eticket/src/components/user-menu.tsx` | Frontend: user avatar + logout |
+| File                                                           | Purpose                                               |
+| -------------------------------------------------------------- | ----------------------------------------------------- |
+| `apps/api/src/modules/auth/auth.routes.ts`                     | Backend: login, refresh, logout endpoints             |
+| `apps/api/src/shared/middleware/auth.ts`                       | Backend: JWT sign/verify, requireAuth, requireRole    |
+| `apps/api/src/db/schema.ts`                                    | Backend: users, refresh_tokens tables                 |
+| `artifacts/transit-eticket/src/lib/auth.ts`                    | Frontend: token storage, API calls, authFetch wrapper |
+| `artifacts/transit-eticket/src/hooks/use-auth.tsx`             | Frontend: React context, session restore              |
+| `artifacts/transit-eticket/src/pages/login.tsx`                | Frontend: login page                                  |
+| `artifacts/transit-eticket/src/components/protected-route.tsx` | Frontend: route guard                                 |
+| `artifacts/transit-eticket/src/components/user-menu.tsx`       | Frontend: user avatar + logout                        |
 
 ## Token flow
 
@@ -59,16 +59,16 @@ Logout:
 Backend middleware: `requireRole(...roles)`
 Frontend wrapper: `<ProtectedRoute roles={[...]}>`
 
-| Route | Backend roles | Frontend roles |
-|-------|---------------|----------------|
-| POST /auth/login | Public | Public |
-| POST /auth/refresh | Public | Public |
-| POST /auth/logout | Authenticated | Authenticated |
-| GET /users | ADMIN, CONTROLLER | — |
-| POST /users | ADMIN | — |
-| GET /stations | Authenticated | Authenticated |
-| POST /stations | ADMIN | — |
-| GET /vehicles | Authenticated (station-scoped) | Authenticated |
-| POST /vehicles | ADMIN, AGENT | — |
-| GET /routes | Authenticated | Authenticated |
-| POST /routes | ADMIN | — |
+| Route              | Backend roles                  | Frontend roles |
+| ------------------ | ------------------------------ | -------------- |
+| POST /auth/login   | Public                         | Public         |
+| POST /auth/refresh | Public                         | Public         |
+| POST /auth/logout  | Authenticated                  | Authenticated  |
+| GET /users         | ADMIN, CONTROLLER              | —              |
+| POST /users        | ADMIN                          | —              |
+| GET /stations      | Authenticated                  | Authenticated  |
+| POST /stations     | ADMIN                          | —              |
+| GET /vehicles      | Authenticated (station-scoped) | Authenticated  |
+| POST /vehicles     | ADMIN, AGENT                   | —              |
+| GET /routes        | Authenticated                  | Authenticated  |
+| POST /routes       | ADMIN                          | —              |

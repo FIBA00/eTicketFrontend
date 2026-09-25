@@ -38,6 +38,7 @@ The AI-generated frontend had no authentication. We added:
 ### Modified files
 
 **`src/App.tsx`**:
+
 - Added imports for auth components
 - Wrapped app with `<AuthProvider>`
 - Replaced `<Route component={X} />` with `<ProtectedRoute><AppShell><X /></AppShell></ProtectedRoute>`
@@ -47,14 +48,14 @@ The AI-generated frontend had no authentication. We added:
 
 ### Route protection map
 
-| Path | Component | Roles |
-|------|-----------|-------|
-| /login | LoginPage | Public |
-| / | HomePage | Any authenticated |
+| Path       | Component     | Roles                                      |
+| ---------- | ------------- | ------------------------------------------ |
+| /login     | LoginPage     | Public                                     |
+| /          | HomePage      | Any authenticated                          |
 | /ticketing | TicketingPage | TICKETER, SYSTEM_ADMIN, STATION_CONTROLLER |
-| /tickets | TicketsPage | Any authenticated |
-| /revenue | RevenuePage | SYSTEM_ADMIN, STATION_CONTROLLER |
-| /settings | SettingsPage | SYSTEM_ADMIN only |
+| /tickets   | TicketsPage   | Any authenticated                          |
+| /revenue   | RevenuePage   | SYSTEM_ADMIN, STATION_CONTROLLER           |
+| /settings  | SettingsPage  | SYSTEM_ADMIN only                          |
 
 ## How the API client uses auth
 
@@ -77,14 +78,15 @@ Before each request, `customFetch` calls this getter and adds the token as a Bea
 ## Environment variables
 
 Create `artifacts/transit-eticket/.env`:
+
 ```
 VITE_API_URL=http://localhost:3000
 ```
 
 ## Demo accounts
 
-| Username | Password | Role |
-|----------|----------|------|
-| admin | admin123 | SYSTEM_ADMIN |
-| agent1 | agent123 | AGENT |
-| ticketer1 | ticketer123 | TICKETER |
+| Username  | Password    | Role         |
+| --------- | ----------- | ------------ |
+| admin     | admin123    | SYSTEM_ADMIN |
+| agent1    | agent123    | AGENT        |
+| ticketer1 | ticketer123 | TICKETER     |

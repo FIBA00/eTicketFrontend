@@ -22,14 +22,17 @@ import { useStations } from "@/hooks/use-api";
 export default function DisplayPage() {
   const params = useParams<{ stationId?: string }>();
   const [selectedStationId, setSelectedStationId] = useState<string>(
-    params.stationId ?? ""
+    params.stationId ?? "",
   );
 
   const { data: stations } = useStations();
   const { data: stationsSummary } = useAllStationsDisplay();
-  const { data: display, isLoading, refetch, isRefetching } = useStationDisplay(
-    selectedStationId || null
-  );
+  const {
+    data: display,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useStationDisplay(selectedStationId || null);
 
   // Auto-select first station if none selected
   useEffect(() => {
@@ -40,19 +43,27 @@ export default function DisplayPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "BOARDING": return "bg-green-500";
-      case "ARRIVING": return "bg-blue-500";
-      case "DEPARTED": return "bg-gray-400";
-      default: return "bg-gray-300";
+      case "BOARDING":
+        return "bg-green-500";
+      case "ARRIVING":
+        return "bg-blue-500";
+      case "DEPARTED":
+        return "bg-gray-400";
+      default:
+        return "bg-gray-300";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "BOARDING": return <Badge className="bg-green-500">Boarding</Badge>;
-      case "ARRIVING": return <Badge className="bg-blue-500">Arriving</Badge>;
-      case "DEPARTED": return <Badge variant="secondary">Departed</Badge>;
-      default: return <Badge variant="outline">{status}</Badge>;
+      case "BOARDING":
+        return <Badge className="bg-green-500">Boarding</Badge>;
+      case "ARRIVING":
+        return <Badge className="bg-blue-500">Arriving</Badge>;
+      case "DEPARTED":
+        return <Badge variant="secondary">Departed</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -67,7 +78,10 @@ export default function DisplayPage() {
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <Select value={selectedStationId} onValueChange={setSelectedStationId}>
+          <Select
+            value={selectedStationId}
+            onValueChange={setSelectedStationId}
+          >
             <SelectTrigger className="w-64">
               <SelectValue placeholder="Select station" />
             </SelectTrigger>
@@ -85,7 +99,9 @@ export default function DisplayPage() {
             onClick={() => refetch()}
             disabled={isRefetching}
           >
-            <RefreshCw className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`}
+            />
           </Button>
         </div>
       </div>
@@ -175,7 +191,9 @@ export default function DisplayPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold">{s.vehicleCount}</span>
-                    <span className="text-sm text-muted-foreground">vehicles today</span>
+                    <span className="text-sm text-muted-foreground">
+                      vehicles today
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -217,7 +235,9 @@ function DisplaySection({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="py-8 text-center text-muted-foreground">{emptyMessage}</p>
+          <p className="py-8 text-center text-muted-foreground">
+            {emptyMessage}
+          </p>
         </CardContent>
       </Card>
     );
@@ -232,7 +252,9 @@ function DisplaySection({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className={`grid gap-4 ${compact ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"}`}>
+        <div
+          className={`grid gap-4 ${compact ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"}`}
+        >
           {vehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
@@ -262,13 +284,15 @@ function VehicleCard({
   const departureTime = new Date(vehicle.departureTime);
   const now = new Date();
   const diffMinutes = Math.round(
-    (departureTime.getTime() - now.getTime()) / (1000 * 60)
+    (departureTime.getTime() - now.getTime()) / (1000 * 60),
   );
 
   return (
     <div
       className={`rounded-lg border p-4 ${
-        vehicle.status === "BOARDING" ? "bg-green-50 border-green-200" : "bg-white"
+        vehicle.status === "BOARDING"
+          ? "bg-green-50 border-green-200"
+          : "bg-white"
       }`}
     >
       {/* Header */}
@@ -301,9 +325,7 @@ function VehicleCard({
                 minute: "2-digit",
               })}
               {vehicle.status === "ARRIVING" && diffMinutes > 0 && (
-                <span className="ml-1 text-blue-600">
-                  ({diffMinutes} min)
-                </span>
+                <span className="ml-1 text-blue-600">({diffMinutes} min)</span>
               )}
             </span>
           </div>
@@ -318,13 +340,16 @@ function VehicleCard({
                   vehicle.availableSeats === 0
                     ? "text-red-600"
                     : vehicle.availableSeats < 5
-                    ? "text-orange-600"
-                    : "text-green-600"
+                      ? "text-orange-600"
+                      : "text-green-600"
                 }`}
               >
                 {vehicle.availableSeats}
               </span>
-              <span className="text-muted-foreground"> / {vehicle.totalSeats}</span>
+              <span className="text-muted-foreground">
+                {" "}
+                / {vehicle.totalSeats}
+              </span>
             </span>
           </div>
 

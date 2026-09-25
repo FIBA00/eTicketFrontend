@@ -24,13 +24,15 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
 
 export function renderWithProviders(
   ui: ReactElement,
-  options: CustomRenderOptions = {}
+  options: CustomRenderOptions = {},
 ) {
   const { withAuth = true, ...renderOptions } = options;
   const queryClient = createTestQueryClient();
 
   function Wrapper({ children }: { children: React.ReactNode }) {
-    let content = <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    let content = (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
 
     if (withAuth) {
       content = <AuthProvider>{content}</AuthProvider>;

@@ -112,14 +112,16 @@ export default function UsersPage() {
       if (editingUser) {
         await updateUser.mutateAsync({ id: editingUser.id, ...data });
       } else {
-        await createUser.mutateAsync(data as {
-          username: string;
-          password: string;
-          fullName: string;
-          phone?: string;
-          role: string;
-          stationId?: string;
-        });
+        await createUser.mutateAsync(
+          data as {
+            username: string;
+            password: string;
+            fullName: string;
+            phone?: string;
+            role: string;
+            stationId?: string;
+          },
+        );
       }
       setDialogOpen(false);
     } catch (err) {
@@ -145,49 +147,80 @@ export default function UsersPage() {
   };
 
   const columns = [
-    { key: "username", header: "Username", render: (u: User) => (
-      <span className="font-mono text-sm">@{u.username}</span>
-    )},
-    { key: "name", header: "Name", render: (u: User) => (
-      <span className="font-medium">{u.fullName}</span>
-    )},
-    { key: "role", header: "Role", render: (u: User) => (
-      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-        u.role === "SYSTEM_ADMIN" ? "bg-purple-100 text-purple-700" :
-        u.role === "AGENT" ? "bg-blue-100 text-blue-700" :
-        u.role === "TICKETER" ? "bg-green-100 text-green-700" :
-        "bg-orange-100 text-orange-700"
-      }`}>
-        {roleLabels[u.role] ?? u.role}
-      </span>
-    )},
-    { key: "phone", header: "Phone", render: (u: User) => u.phone ?? "—" },
-    { key: "station", header: "Station", render: (u: User) => {
-      const station = stations?.find((s) => s.id === u.stationId);
-      return station?.name ?? "—";
-    }},
-    { key: "status", header: "Status", render: (u: User) => (
-      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-        u.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-      }`}>
-        {u.isActive ? "Active" : "Inactive"}
-      </span>
-    )},
-    { key: "actions", header: "", render: (u: User) => (
-      <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-        <Button variant="ghost" size="icon" onClick={() => openEdit(u)}>
-          <Pencil className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setDeletingUser(u)}
-          className="text-destructive hover:text-destructive"
+    {
+      key: "username",
+      header: "Username",
+      render: (u: User) => (
+        <span className="font-mono text-sm">@{u.username}</span>
+      ),
+    },
+    {
+      key: "name",
+      header: "Name",
+      render: (u: User) => <span className="font-medium">{u.fullName}</span>,
+    },
+    {
+      key: "role",
+      header: "Role",
+      render: (u: User) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+            u.role === "SYSTEM_ADMIN"
+              ? "bg-purple-100 text-purple-700"
+              : u.role === "AGENT"
+                ? "bg-blue-100 text-blue-700"
+                : u.role === "TICKETER"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-orange-100 text-orange-700"
+          }`}
         >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </div>
-    )},
+          {roleLabels[u.role] ?? u.role}
+        </span>
+      ),
+    },
+    { key: "phone", header: "Phone", render: (u: User) => u.phone ?? "—" },
+    {
+      key: "station",
+      header: "Station",
+      render: (u: User) => {
+        const station = stations?.find((s) => s.id === u.stationId);
+        return station?.name ?? "—";
+      },
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (u: User) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+            u.isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          {u.isActive ? "Active" : "Inactive"}
+        </span>
+      ),
+    },
+    {
+      key: "actions",
+      header: "",
+      render: (u: User) => (
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="icon" onClick={() => openEdit(u)}>
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setDeletingUser(u)}
+            className="text-destructive hover:text-destructive"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -216,9 +249,7 @@ export default function UsersPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {editingUser ? "Edit User" : "Add User"}
-            </DialogTitle>
+            <DialogTitle>{editingUser ? "Edit User" : "Add User"}</DialogTitle>
             <DialogDescription>
               {editingUser
                 ? "Update user information"
@@ -232,7 +263,9 @@ export default function UsersPage() {
                 <Input
                   id="username"
                   value={form.username}
-                  onChange={(e) => setForm({ ...form, username: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, username: e.target.value })
+                  }
                   placeholder="e.g. ticketer2"
                   required
                 />
@@ -242,7 +275,9 @@ export default function UsersPage() {
                 <Input
                   id="fullName"
                   value={form.fullName}
-                  onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, fullName: e.target.value })
+                  }
                   placeholder="e.g. Abebe Kebede"
                   required
                 />
@@ -259,7 +294,9 @@ export default function UsersPage() {
                     id="password"
                     type="password"
                     value={form.password}
-                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, password: e.target.value })
+                    }
                     placeholder={editingUser ? "••••••••" : "Min 6 characters"}
                     className="pl-10"
                     required={!editingUser}
@@ -306,11 +343,13 @@ export default function UsersPage() {
                     <SelectValue placeholder="Select station (optional)" />
                   </SelectTrigger>
                   <SelectContent>
-                    {stations?.filter((s) => s.isActive).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name} ({s.code})
-                      </SelectItem>
-                    ))}
+                    {stations
+                      ?.filter((s) => s.isActive)
+                      .map((s) => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {s.name} ({s.code})
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -323,13 +362,22 @@ export default function UsersPage() {
             )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={createUser.isPending || updateUser.isPending}>
+              <Button
+                type="submit"
+                disabled={createUser.isPending || updateUser.isPending}
+              >
                 {createUser.isPending || updateUser.isPending
                   ? "Saving..."
-                  : editingUser ? "Update" : "Create"}
+                  : editingUser
+                    ? "Update"
+                    : "Create"}
               </Button>
             </DialogFooter>
           </form>

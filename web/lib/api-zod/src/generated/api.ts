@@ -5,47 +5,41 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import * as zod from 'zod';
-
+import * as zod from "zod";
 
 /**
  * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
-  "status": zod.string()
-})
-
+  status: zod.string(),
+});
 
 /**
  * @summary List issued passenger tickets
  */
 export const GetTicketsResponseItem = zod.object({
-  "id": zod.string(),
-  "routeId": zod.string(),
-  "origin": zod.string(),
-  "destination": zod.string(),
-  "distanceKm": zod.number(),
-  "fareETB": zod.number(),
-  "serviceChargeRate": zod.number(),
-  "serviceChargeETB": zod.number(),
-  "vatETB": zod.number(),
-  "stationFeeETB": zod.number(),
-  "totalETB": zod.number(),
-  "ticketerCommissionETB": zod.number(),
-  "vehiclePlate": zod.string(),
-  "issuedAt": zod.coerce.date()
-})
-export const GetTicketsResponse = zod.array(GetTicketsResponseItem)
-
+  id: zod.string(),
+  routeId: zod.string(),
+  origin: zod.string(),
+  destination: zod.string(),
+  distanceKm: zod.number(),
+  fareETB: zod.number(),
+  serviceChargeRate: zod.number(),
+  serviceChargeETB: zod.number(),
+  vatETB: zod.number(),
+  stationFeeETB: zod.number(),
+  totalETB: zod.number(),
+  ticketerCommissionETB: zod.number(),
+  vehiclePlate: zod.string(),
+  issuedAt: zod.coerce.date(),
+});
+export const GetTicketsResponse = zod.array(GetTicketsResponseItem);
 
 /**
  * Ticket IDs are idempotency keys so offline tickets can be safely synchronized more than once.
  * @summary Record a passenger ticket
  */
-
-
-
 
 export const createTicketBodyDistanceKmExclusiveMin = 0;
 
@@ -61,56 +55,52 @@ export const createTicketBodyTotalETBExclusiveMin = 0;
 
 export const createTicketBodyTicketerCommissionETBMin = 0;
 
-
-
-
 export const CreateTicketBody = zod.object({
-  "id": zod.string().min(1),
-  "routeId": zod.string().min(1),
-  "origin": zod.string().min(1),
-  "destination": zod.string().min(1),
-  "distanceKm": zod.number().gt(createTicketBodyDistanceKmExclusiveMin),
-  "fareETB": zod.number().gt(createTicketBodyFareETBExclusiveMin),
-  "serviceChargeRate": zod.union([zod.literal(0.04),zod.literal(0.05)]),
-  "serviceChargeETB": zod.number().min(createTicketBodyServiceChargeETBMin),
-  "vatETB": zod.number().min(createTicketBodyVatETBMin),
-  "stationFeeETB": zod.number().min(createTicketBodyStationFeeETBMin),
-  "totalETB": zod.number().gt(createTicketBodyTotalETBExclusiveMin),
-  "ticketerCommissionETB": zod.number().min(createTicketBodyTicketerCommissionETBMin),
-  "vehiclePlate": zod.string().min(1),
-  "issuedAt": zod.coerce.date()
-})
+  id: zod.string().min(1),
+  routeId: zod.string().min(1),
+  origin: zod.string().min(1),
+  destination: zod.string().min(1),
+  distanceKm: zod.number().gt(createTicketBodyDistanceKmExclusiveMin),
+  fareETB: zod.number().gt(createTicketBodyFareETBExclusiveMin),
+  serviceChargeRate: zod.union([zod.literal(0.04), zod.literal(0.05)]),
+  serviceChargeETB: zod.number().min(createTicketBodyServiceChargeETBMin),
+  vatETB: zod.number().min(createTicketBodyVatETBMin),
+  stationFeeETB: zod.number().min(createTicketBodyStationFeeETBMin),
+  totalETB: zod.number().gt(createTicketBodyTotalETBExclusiveMin),
+  ticketerCommissionETB: zod
+    .number()
+    .min(createTicketBodyTicketerCommissionETBMin),
+  vehiclePlate: zod.string().min(1),
+  issuedAt: zod.coerce.date(),
+});
 
 export const CreateTicketResponse = zod.object({
-  "id": zod.string(),
-  "routeId": zod.string(),
-  "origin": zod.string(),
-  "destination": zod.string(),
-  "distanceKm": zod.number(),
-  "fareETB": zod.number(),
-  "serviceChargeRate": zod.number(),
-  "serviceChargeETB": zod.number(),
-  "vatETB": zod.number(),
-  "stationFeeETB": zod.number(),
-  "totalETB": zod.number(),
-  "ticketerCommissionETB": zod.number(),
-  "vehiclePlate": zod.string(),
-  "issuedAt": zod.coerce.date()
-})
-
+  id: zod.string(),
+  routeId: zod.string(),
+  origin: zod.string(),
+  destination: zod.string(),
+  distanceKm: zod.number(),
+  fareETB: zod.number(),
+  serviceChargeRate: zod.number(),
+  serviceChargeETB: zod.number(),
+  vatETB: zod.number(),
+  stationFeeETB: zod.number(),
+  totalETB: zod.number(),
+  ticketerCommissionETB: zod.number(),
+  vehiclePlate: zod.string(),
+  issuedAt: zod.coerce.date(),
+});
 
 /**
  * @summary Get today's ticket and revenue totals
  */
 export const GetTicketSummaryResponse = zod.object({
-  "ticketCount": zod.number().int(),
-  "grossCollectionETB": zod.number(),
-  "baseFaresETB": zod.number(),
-  "serviceChargesETB": zod.number(),
-  "vatETB": zod.number(),
-  "stationFeesETB": zod.number(),
-  "commissionsETB": zod.number(),
-  "netSettlementETB": zod.number()
-})
-
-
+  ticketCount: zod.number().int(),
+  grossCollectionETB: zod.number(),
+  baseFaresETB: zod.number(),
+  serviceChargesETB: zod.number(),
+  vatETB: zod.number(),
+  stationFeesETB: zod.number(),
+  commissionsETB: zod.number(),
+  netSettlementETB: zod.number(),
+});

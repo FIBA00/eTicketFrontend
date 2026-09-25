@@ -8,7 +8,6 @@ import {
   Loader2,
   MapPin,
   Phone,
-  ,
   Ticket as TicketIcon,
   User,
   XCircle,
