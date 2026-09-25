@@ -32,7 +32,9 @@ import { useIssueTicket, useIssueBatch } from "@/hooks/use-tickets";
 import { useAuth } from "@/hooks/use-auth";
 import { formatCents } from "@/lib/money-utils";
 import { calcFareBreakdown } from "@e-ticket/money";
-import { queueTicketIssue, syncNow, isOnline } from "@/lib/sync-engine";
+import { queueTicketIssue, syncNow } from "@/lib/sync-engine";
+import { isOnline } from "@/lib/offline-queue";
+
 import { generateMutationId } from "@/lib/offline-queue";
 
 export default function TicketIssuePage() {
