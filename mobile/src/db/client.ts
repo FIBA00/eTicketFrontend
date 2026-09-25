@@ -1,4 +1,4 @@
-import * as SQLite from "expo-sqlite";
+import * as SQLite from "react-native-sqlite-storage";
 import { CREATE_TABLES, SCHEMA_VERSION } from "./schema";
 
 let db: SQLite.SQLiteDatabase | null = null;

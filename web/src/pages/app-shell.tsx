@@ -7,26 +7,6 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { AuthProvider } from "@/hooks/use-auth";
-import { ProtectedRoute } from "@/components/protected-route";
-import { UserMenu } from "@/components/user-menu";
-import { SyncStatus } from "@/components/sync-status";
-import { initAutoSync } from "@/lib/sync-engine";
-import { useAuth } from "@/hooks/use-auth";
-import { setBaseUrl, setAuthTokenGetter } from "@workspace/api-client-react";
-import { getAccessToken, refreshAccessToken } from "@/lib/auth";
-
-import LoginPage from "@/pages/login";
-import StationsPage from "@/pages/stations";
-import VehiclesPage from "@/pages/vehicles";
-import RoutesPage from "@/pages/routes";
-import UsersPage from "@/pages/users";
-import TicketsPage from "@/pages/tickets";
-import TicketIssuePage from "@/pages/ticket-issue";
-import TicketDetailPage from "@/pages/ticket-detail";
-import BatchViewPage from "@/pages/batch-view";
-import DisplayPage from "@/pages/display";
-import PublicDisplayPage from "@/pages/display-public";
 
 import {
   QueryClient,
@@ -64,35 +44,34 @@ import {
   Bus,
   Users,
 } from "lucide-react";
-import type {
-  Ticket as ApiTicket,
-  TicketInput,
-  TicketSummary,
-} from "@workspace/api-client-react";
-import {
-  getGetTicketSummaryQueryKey,
-  getGetTicketsQueryKey,
-  useCreateTicket,
-  useGetTicketSummary,
-  useGetTickets,
-} from "@workspace/api-client-react";
+
+import { AuthProvider } from "@/hooks/use-auth";
+import { ProtectedRoute } from "@/components/protected-route";
+import { UserMenu } from "@/components/user-menu";
+import { SyncStatus } from "@/components/sync-status";
+import { initAutoSync } from "@/lib/sync-engine";
+import { useAuth } from "@/hooks/use-auth";
+import { getAccessToken, refreshAccessToken } from "@/lib/auth";
+
+import LoginPage from "@/pages/login";
+import StationsPage from "@/pages/stations";
+import VehiclesPage from "@/pages/vehicles";
+import RoutesPage from "@/pages/routes";
+import UsersPage from "@/pages/users";
+import TicketsPage from "@/pages/tickets";
+import TicketIssuePage from "@/pages/ticket-issue";
+import TicketDetailPage from "@/pages/ticket-detail";
+import BatchViewPage from "@/pages/batch-view";
+import DisplayPage from "@/pages/display";
+import PublicDisplayPage from "@/pages/display-public";
+
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 
-const queryClient = new QueryClient();
 
-type RouteOption = {
-  id: string;
-  name: string;
-  origin: string;
-  destination: string;
-  distanceKm: number;
-  fareETB: number;
-};
-
-export function AppShell({ children }: { children: ReactNode }) {
+export default function AppShell({ children }: { children: ReactNode }) {
   const { hasRole } = useAuth();
   const online = useOnlineStatus();
   const queueCount = useQueueCount();

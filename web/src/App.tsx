@@ -44,18 +44,6 @@ import {
   Bus,
   Users,
 } from "lucide-react";
-import type {
-  Ticket as ApiTicket,
-  TicketInput,
-  TicketSummary,
-} from "@workspace/api-client-react";
-import {
-  getGetTicketSummaryQueryKey,
-  getGetTicketsQueryKey,
-  useCreateTicket,
-  useGetTicketSummary,
-  useGetTickets,
-} from "@workspace/api-client-react";
 
 // ! internal imports
 
@@ -82,17 +70,20 @@ import {
   useQueueCount,
   useLocalQueue,
   useOfflineSync,
-  AppShell,
   makeTicket,
 } from "@/lib/utils.ts";
 
 // ! default components
+
 import PageHeader from "@/components/page-header.tsx";
 import LoadingBlock from "@/components/loading-block.tsx";
 import QueryError from "@/components/query-error.tsx";
 import EmptyState from "@/components/empty-state.tsx";
 import MetricCard from "@/components/metric-card.tsx";
 import SectionLabel from "@/components/section-label.tsx";
+
+import AppShell from "@/pages/app-shell.tsx";
+
 
 import Homepage from "@/pages/home-page.tsx";
 import TicketingPage from "@/pages/ticketing-page.tsx";
@@ -111,15 +102,15 @@ import { UserMenu } from "@/components/user-menu";
 import { SyncStatus } from "@/components/sync-status";
 import { initAutoSync } from "@/lib/sync-engine";
 import { useAuth } from "@/hooks/use-auth";
-import { setBaseUrl, setAuthTokenGetter } from "@workspace/api-client-react";
 import { getAccessToken, refreshAccessToken } from "@/lib/auth";
+import { setBaseUrl, setAuthTokenGetter } from "@/lib/api-config";
 
 import LoginPage from "@/pages/login";
 import StationsPage from "@/pages/stations";
 import VehiclesPage from "@/pages/vehicles";
 import RoutesPage from "@/pages/routes";
 import UsersPage from "@/pages/users";
-import TicketsPage from "@/pages/tickets";
+// import TicketsPage from "@/pages/tickets";
 import TicketIssuePage from "@/pages/ticket-issue";
 import TicketDetailPage from "@/pages/ticket-detail";
 import BatchViewPage from "@/pages/batch-view";
@@ -134,14 +125,7 @@ import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
 
-type RouteOption = {
-  id: string;
-  name: string;
-  origin: string;
-  destination: string;
-  distanceKm: number;
-  fareETB: number;
-};
+
 function Router() {
   const [location] = useLocation();
   return (
@@ -163,7 +147,7 @@ function Router() {
               roles={["TICKETER", "SYSTEM_ADMIN", "STATION_CONTROLLER"]}
             >
               <AppShell>
-                <TicketsPage />
+                <TicketingPage />
               </AppShell>
             </ProtectedRoute>
           )}

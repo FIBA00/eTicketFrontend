@@ -1,0 +1,13 @@
+{
+	"eslint.debug": true,
+	"eslint.format.enable": true,
+	"eslint.ignoreUntitled": true,
+	"eslint.lintTask.enable": true,
+	"eslint.onIgnoredFiles": "warn",
+	"eslint.problems.shortenToSingleLine": true,
+	"eslint.quiet": false,
+	"eslint.useESLintClass": true,
+	"eslint.useRealpaths": true,
+	"eslint.useFlatConfig": true
+
+}
