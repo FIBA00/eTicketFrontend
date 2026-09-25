@@ -26,7 +26,6 @@
 # ============================================================================
 minimumReleaseAge: 1440
 
-
 packages:
   - artifacts/*
   - lib/*
@@ -55,7 +54,6 @@ catalog:
   vite: ^7.3.2
   wouter: ^3.3.5
   zod: ^3.25.76
-
 
 onlyBuiltDependencies:
   - "@swc/core"
