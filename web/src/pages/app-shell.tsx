@@ -1,293 +1,65 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type FormEvent,
-  type ReactNode,
-} from "react";
-
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { Link, Route, Switch, useLocation } from "wouter";
-import {
-  AlertCircle,
-  ArrowDownToLine,
-  ArrowRight,
-  Banknote,
-  BarChart3,
-  Check,
-  ChevronDown,
-  CircleHelp,
-  ClipboardList,
-  Cloud,
-  CloudOff,
-  Landmark,
-  LayoutDashboard,
-  Menu,
-  Printer,
-  ReceiptText,
-  RefreshCw,
-  Search,
-  Send,
-  Settings,
-  ShieldCheck,
-  SlidersHorizontal,
-  Ticket,
-  TrainFront,
-  Wifi,
-  Building2,
-  Bus,
-  Users,
-} from "lucide-react";
-
-import Homepage from "@/pages/home-page.tsx";
-
-import TicketingPage from "@/pages/ticketing-page.tsx";
-import TicketsPage from "@/pages/tickets-page.tsx";
-import RevenuePage from "@/pages/revenue-page.tsx";
-import SettingsPage from "@/pages/settings-page.tsx";
-import LoginPage from "@/pages/login";
-import StationsPage from "@/pages/stations";
-import VehiclesPage from "@/pages/vehicles";
-import RoutesPage from "@/pages/routes";
-import UsersPage from "@/pages/users";
-// import TicketsPage from "@/pages/tickets";
-import TicketIssuePage from "@/pages/ticket-issue";
-import TicketDetailPage from "@/pages/ticket-detail";
-import BatchViewPage from "@/pages/batch-view";
-import DisplayPage from "@/pages/display";
-import PublicDisplayPage from "@/pages/display-public";
-import NotFound from "@/pages/not-found";
-
-// # components
-import PageHeader from "@/components/page-header.tsx";
-import LoadingBlock from "@/components/loading-block.tsx";
-import QueryError from "@/components/query-error.tsx";
-import EmptyState from "@/components/empty-state.tsx";
-import MetricCard from "@/components/metric-card.tsx";
-import SectionLabel from "@/components/section-label.tsx";
-import TicketRow from "@/components/ticket-row.tsx";
-import BreakdownRow from "@/components/breakdown-row.tsx";
-import QueuedRegister from "@/components/queued-register.tsx";
-import SettingValue from "@/components/settings-value.tsx";
-import UserMenu from "@/components/user-menu";
-import SyncStatus from "@/components/sync-status";
-import ErrorBoundary from "@/components/error-boundary";
-import Toaster from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-
-// #  hooks
+import { ReactNode } from "react";
+import { useLocation } from "wouter";
+import { LayoutDashboard, Ticket, ClipboardList, BarChart3, Building2, Bus, Route, Users, Settings, Monitor } from "lucide-react";
+import { Link } from "wouter";
+import { cn } from "@/lib/utils";
+import UserMenu  from "@/components/user-menu";
 import { useAuth } from "@/hooks/use-auth";
-import { AuthProvider } from "@/hooks/use-auth";
+import SyncStatus  from "@/components/sync-status";
 
-// # libs
-import { getAccessToken, refreshAccessToken } from "@/lib/auth";
-import { setBaseUrl, setAuthTokenGetter } from "@/lib/api-config";
-import { initAutoSync } from "@/lib/sync-engine";
+const navItems = [
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/ticketing", label: "Issue Ticket", icon: Ticket },
+  { href: "/tickets", label: "Tickets", icon: ClipboardList },
+  { href: "/revenue", label: "Revenue", icon: BarChart3 },
+  { href: "/stations", label: "Stations", icon: Building2 },
+  { href: "/vehicles", label: "Vehicles", icon: Bus },
+  { href: "/routes", label: "Routes", icon: Route },
+  { href: "/display", label: "Display Board", icon: Monitor },
+  { href: "/users", label: "Users", icon: Users, adminOnly: true },
+  { href: "/settings", label: "Settings", icon: Settings },
+];
 
-// # utils
-
-import {
-	QUEUE_KEY,
-	AUTO_SYNC_KEY,
-	STATION_NAME,
-	STATION_CODE,
-	VEHICLES,
-	ROUTES,
-} from "@/lib/utils.ts";
-
-import {
-	readQueue,
-	writeQueue,
-	queueTicket,
-	isAutoSyncEnabled,
-	currency,
-	shortDate,
-	errorMessage,
-	useOnlineStatus,
-	useQueueCount,
-	useLocalQueue,
-	useOfflineSync,
-	makeTicket,
-} from "@/lib/utils.ts";
-const queryClient = new QueryClient();
-
-
-
-export default function AppShell({ children }: { children: ReactNode }) {
-  const { hasRole } = useAuth();
-  const online = useOnlineStatus();
-  const queueCount = useQueueCount();
-  useOfflineSync(online, queueCount);
-  const [mobileNav, setMobileNav] = useState(false);
+export function AppShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
-  const navItems = [
-    { href: "/", label: "Station overview", icon: LayoutDashboard },
-    { href: "/ticketing", label: "Issue ticket", icon: Ticket },
-    { href: "/tickets", label: "Ticket register", icon: ClipboardList },
-    { href: "/revenue", label: "Revenue & settlement", icon: BarChart3 },
-    { href: "/stations", label: "Stations", icon: Building2 },
-    { href: "/vehicles", label: "Vehicles", icon: Bus },
-    { href: "/routes", label: "Routes", icon: Route },
-    { href: "/display", label: "Display Board", icon: Monitor },
-    { href: "/users", label: "Users", icon: Users, adminOnly: true },
-    { href: "/settings", label: "Station settings", icon: Settings },
-  ];
+  const { hasRole } = useAuth();
+
   return (
-    <div className="min-h-[100dvh] bg-background">
-      {mobileNav && (
-        <button
-          aria-label="Close navigation"
-          data-testid="button-close-navigation"
-          className="fixed inset-0 z-30 bg-foreground/30 lg:hidden"
-          onClick={() => setMobileNav(false)}
-        />
-      )}
-      <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-[276px] flex-col bg-sidebar text-sidebar-foreground transition-transform duration-300 lg:translate-x-0 ${mobileNav ? "translate-x-0" : "-translate-x-full"}`}
-      >
-        <div className="flex h-[86px] items-center gap-3 border-b border-sidebar-border px-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
-            <TrainFront size={21} strokeWidth={2.3} />
-          </div>
-          <div>
-            <div className="font-semibold tracking-tight">Transit Desk</div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-sidebar-foreground/55">
-              E-ticketing / v1.0
-            </div>
-          </div>
+    <div className="min-h-screen bg-background">
+      <aside className="fixed inset-y-0 left-0 z-50 w-64 border-r bg-card">
+        <div className="flex h-16 items-center border-b px-6">
+          <h1 className="text-xl font-bold">E-Ticket</h1>
         </div>
-        <div className="px-4 pt-7">
-          <div className="mb-3 px-3 font-mono text-[10px] uppercase tracking-[0.18em] text-sidebar-foreground/45">
-            Station console
-          </div>
-
-          <nav className="space-y-1">
-            {navItems
-              .filter((item) => !item.adminOnly || hasRole("SYSTEM_ADMIN"))
-              .map(({ href, label, icon: Icon }) => {
-                const active =
-                  href === "/" ? location === "/" : location.startsWith(href);
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    data-testid={`link-nav-${label.toLowerCase().replaceAll(" ", "-")}`}
-                    onClick={() => setMobileNav(false)}
-                    className={`group flex items-center justify-between rounded-sm px-3 py-3 text-sm transition-colors ${active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/68 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground"}`}
-                  >
-                    <span className="flex items-center gap-3">
-                      <Icon size={17} strokeWidth={active ? 2.2 : 1.8} />
-                      <span>{label}</span>
-                    </span>
-                    {href === "/tickets" && queueCount > 0 && (
-                      <span
-                        data-testid="badge-queued-navigation"
-                        className="rounded-full bg-accent px-2 py-0.5 font-mono text-[10px] font-semibold text-accent-foreground"
-                      >
-                        {queueCount}
-                      </span>
-                    )}
-                    {active && href !== "/tickets" && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-sidebar-primary" />
-                    )}
-                  </Link>
-                );
-              })}
-          </nav>
-        </div>
-
-        <div className="mt-auto border-t border-sidebar-border p-5">
-          <div className="mb-4 flex items-center gap-2 text-xs text-sidebar-foreground/60">
-            <span
-              className={`h-2 w-2 rounded-full ${online ? "bg-sidebar-primary signal-live" : "bg-accent"}`}
-            />
-            {online ? "Station online" : "Offline mode active"}
-          </div>
-          <div className="rounded-sm border border-sidebar-border bg-sidebar-accent/45 p-3">
-            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/45">
-              Signed in as
-            </div>
-            <div className="mt-1 text-sm font-medium">
-              Counter 04 · Selamawit T.
-            </div>
-            <div className="mt-1 text-xs text-sidebar-foreground/55">
-              {STATION_CODE} / Addis Ababa
-            </div>
-          </div>
-        </div>
+        <nav className="space-y-1 p-4">
+          {navItems.filter((item) => !item.adminOnly || hasRole("SYSTEM_ADMIN")).map((item) => {
+            const Icon = item.icon;
+            const isActive = location === item.href;
+            return (
+              <Link key={item.href} href={item.href}>
+                <div className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+                  isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}>
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </div>
+              </Link>
+            );
+          })}
+        </nav>
       </aside>
-      <div className="lg:pl-[276px]">
-        <header className="sticky top-0 z-20 flex h-[68px] items-center justify-between border-b border-border/80 bg-background/90 px-4 backdrop-blur-md sm:px-7">
-          <div className="flex items-center gap-3">
-            <button
-              className="rounded-sm p-2 hover:bg-muted lg:hidden"
-              data-testid="button-open-navigation"
-              aria-label="Open navigation"
-              onClick={() => setMobileNav(true)}
-            >
-              <Menu size={21} />
-            </button>
-            <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
-              <Landmark size={15} />
-              <span>{STATION_NAME}</span>
-              <span className="text-border">/</span>
-              <span className="font-mono text-[11px]">{STATION_CODE}</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground sm:hidden">
-              <TrainFront size={15} />
-              {STATION_CODE}
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div
-              data-testid="status-connection"
-              className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${online ? "border-primary/25 bg-primary/8 text-primary" : "border-accent/40 bg-accent/10 text-accent-foreground"}`}
-            >
-              {online ? <Wifi size={14} /> : <CloudOff size={14} />}
-              <span className="hidden sm:inline">
-                {online ? "Connected" : "Offline · queueing locally"}
-              </span>
-            </div>
-            <div className="hidden h-8 w-px bg-border sm:block" />
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary font-mono text-xs font-semibold text-secondary-foreground">
-                ST
-              </div>
-              <span className="hidden text-sm font-medium md:inline">
-                Selamawit T.
-              </span>
-              <ChevronDown size={15} className="text-muted-foreground" />
-            </div>
-
+      <div className="pl-64">
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background px-6">
+          <div />
+          <div className="flex items-center gap-4">
             <SyncStatus />
             <UserMenu />
           </div>
         </header>
-        {!online && (
-          <div
-            data-testid="banner-offline"
-            className="flex items-center justify-center gap-2 border-b border-accent/30 bg-accent/10 px-4 py-2 text-xs text-accent-foreground"
-          >
-            <CloudOff size={14} />
-            <span>
-              Network unavailable. New tickets are safe on this device and will
-              sync automatically.
-            </span>
-            {queueCount > 0 && (
-              <strong className="font-mono">{queueCount} queued</strong>
-            )}
-          </div>
-        )}
-        <main className="mx-auto max-w-[1500px] px-4 py-7 sm:px-7 lg:px-10 lg:py-9">
-          {children}
-        </main>
+        <main className="p-6">{children}</main>
       </div>
     </div>
   );
 }
+
+export default AppShell;

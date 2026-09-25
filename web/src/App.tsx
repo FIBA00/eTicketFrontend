@@ -48,13 +48,16 @@ import {
 // ! internal imports
 
 import AppShell from "@/pages/app-shell.tsx";
-import Homepage from "@/pages/home-page.tsx";
+import HomePage from "@/pages/home-page.tsx";
+import NotFound from "@/pages/not-found";
+
+
 
 // import TicketingPage from "@/pages/ticketing-page.tsx";
 // import TicketsPage from "@/pages/tickets-page.tsx";
 // import RevenuePage from "@/pages/revenue-page.tsx";
 // import SettingsPage from "@/pages/settings-page.tsx";
-// import LoginPage from "@/pages/login";
+import LoginPage from "@/pages/login";
 // import StationsPage from "@/pages/stations";
 // import VehiclesPage from "@/pages/vehicles";
 // import RoutesPage from "@/pages/routes";
@@ -65,10 +68,9 @@ import Homepage from "@/pages/home-page.tsx";
 // import BatchViewPage from "@/pages/batch-view";
 // import DisplayPage from "@/pages/display";
 // import PublicDisplayPage from "@/pages/display-public";
-// import NotFound from "@/pages/not-found";
 
 // // # components
-// import ProtectedRoute from "@/components/protected-route";
+import ProtectedRoute from "@/components/protected-route";
 // import PageHeader from "@/components/page-header.tsx";
 // import LoadingBlock from "@/components/loading-block.tsx";
 // import QueryError from "@/components/query-error.tsx";
@@ -81,18 +83,18 @@ import Homepage from "@/pages/home-page.tsx";
 // import SettingValue from "@/components/settings-value.tsx";
 // import UserMenu from "@/components/user-menu";
 // import SyncStatus from "@/components/sync-status";
-// import ErrorBoundary from "@/components/error-boundary";
-// import Toaster from "@/components/ui/toaster";
-// import { TooltipProvider } from "@/components/ui/tooltip";
+import Toaster from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import {ErrorBoundary} from "@/components/error-boundary.tsx";
 
 // // #  hooks
 // import { useAuth } from "@/hooks/use-auth";
-// import { AuthProvider } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
 
 // // # libs
-// import { getAccessToken, refreshAccessToken } from "@/lib/auth";
-// import { setBaseUrl, setAuthTokenGetter } from "@/lib/api-config";
-// import { initAutoSync } from "@/lib/sync-engine";
+import { getAccessToken, refreshAccessToken } from "@/lib/auth";
+import { setBaseUrl, setAuthTokenGetter } from "@/lib/api-config";
+import { initAutoSync } from "@/lib/sync-engine";
 
 // # utils
 
@@ -127,6 +129,7 @@ function Router() {
 		<ErrorBoundary resetKey={location}>
 			<Switch>
 				<Route path="/login" component={LoginPage} />
+				
 				<Route path="/">
 					{() => (
 						<ProtectedRoute>
@@ -136,6 +139,9 @@ function Router() {
 						</ProtectedRoute>
 					)}
 				</Route>
+				
+				{/*
+				
 				<Route path="/ticketing">
 					{() => (
 						<ProtectedRoute
@@ -257,7 +263,8 @@ function Router() {
 				</Route>
 				<Route path="/display/public/:stationId">
 					{() => <PublicDisplayPage />}
-				</Route>
+				</Route> */}
+
 				<Route component={NotFound} />
 			</Switch>
 		</ErrorBoundary>
