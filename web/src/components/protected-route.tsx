@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
   roles?: string[];
 }
 
-export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, hasRole } = useAuth();
 
   if (isLoading) {

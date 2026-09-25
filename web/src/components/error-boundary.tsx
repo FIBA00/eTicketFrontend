@@ -64,7 +64,7 @@ function DefaultFallback({ error, resetError }: ErrorFallbackProps) {
   );
 }
 
-export class ErrorBoundary extends Component<
+export  default class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {

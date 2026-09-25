@@ -18,7 +18,7 @@ const roleLabels: Record<string, string> = {
   STATION_CONTROLLER: "Station Controller",
 };
 
-export function UserMenu() {
+export default function UserMenu() {
   const { user, logout } = useAuth();
 
   if (!user) return null;

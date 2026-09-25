@@ -21,7 +21,7 @@ import {
 } from "@/lib/sync-engine";
 import { getQueueLength, isOnline, onOnlineChange } from "@/lib/offline-queue";
 
-export function SyncStatus() {
+export default function SyncStatus() {
   const [online, setOnline] = useState(isOnline());
   const [queueLength, setQueueLength] = useState(getQueueLength());
   const [isSyncing, setIsSyncing] = useState(false);

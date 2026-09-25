@@ -45,30 +45,78 @@ import {
   Users,
 } from "lucide-react";
 
-import { AuthProvider } from "@/hooks/use-auth";
-import { ProtectedRoute } from "@/components/protected-route";
-import { UserMenu } from "@/components/user-menu";
-import { SyncStatus } from "@/components/sync-status";
-import { initAutoSync } from "@/lib/sync-engine";
-import { useAuth } from "@/hooks/use-auth";
-import { getAccessToken, refreshAccessToken } from "@/lib/auth";
+import Homepage from "@/pages/home-page.tsx";
 
+import TicketingPage from "@/pages/ticketing-page.tsx";
+import TicketsPage from "@/pages/tickets-page.tsx";
+import RevenuePage from "@/pages/revenue-page.tsx";
+import SettingsPage from "@/pages/settings-page.tsx";
 import LoginPage from "@/pages/login";
 import StationsPage from "@/pages/stations";
 import VehiclesPage from "@/pages/vehicles";
 import RoutesPage from "@/pages/routes";
 import UsersPage from "@/pages/users";
-import TicketsPage from "@/pages/tickets";
+// import TicketsPage from "@/pages/tickets";
 import TicketIssuePage from "@/pages/ticket-issue";
 import TicketDetailPage from "@/pages/ticket-detail";
 import BatchViewPage from "@/pages/batch-view";
 import DisplayPage from "@/pages/display";
 import PublicDisplayPage from "@/pages/display-public";
-
-import { ErrorBoundary } from "@/components/error-boundary";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+
+// # components
+import PageHeader from "@/components/page-header.tsx";
+import LoadingBlock from "@/components/loading-block.tsx";
+import QueryError from "@/components/query-error.tsx";
+import EmptyState from "@/components/empty-state.tsx";
+import MetricCard from "@/components/metric-card.tsx";
+import SectionLabel from "@/components/section-label.tsx";
+import TicketRow from "@/components/ticket-row.tsx";
+import BreakdownRow from "@/components/breakdown-row.tsx";
+import QueuedRegister from "@/components/queued-register.tsx";
+import SettingValue from "@/components/settings-value.tsx";
+import UserMenu from "@/components/user-menu";
+import SyncStatus from "@/components/sync-status";
+import ErrorBoundary from "@/components/error-boundary";
+import Toaster from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+// #  hooks
+import { useAuth } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
+
+// # libs
+import { getAccessToken, refreshAccessToken } from "@/lib/auth";
+import { setBaseUrl, setAuthTokenGetter } from "@/lib/api-config";
+import { initAutoSync } from "@/lib/sync-engine";
+
+// # utils
+
+import {
+	QUEUE_KEY,
+	AUTO_SYNC_KEY,
+	STATION_NAME,
+	STATION_CODE,
+	VEHICLES,
+	ROUTES,
+} from "@/lib/utils.ts";
+
+import {
+	readQueue,
+	writeQueue,
+	queueTicket,
+	isAutoSyncEnabled,
+	currency,
+	shortDate,
+	errorMessage,
+	useOnlineStatus,
+	useQueueCount,
+	useLocalQueue,
+	useOfflineSync,
+	makeTicket,
+} from "@/lib/utils.ts";
+const queryClient = new QueryClient();
+
 
 
 export default function AppShell({ children }: { children: ReactNode }) {
