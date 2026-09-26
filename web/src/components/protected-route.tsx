@@ -1,14 +1,19 @@
 import type { ReactNode } from "react";
 import { Redirect } from "wouter";
 import { Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import React from "react";
+
+import { useAuth } from "../modules/auth/hooks/use-auth.tsx";
 
 interface ProtectedRouteProps {
   children: ReactNode;
   roles?: string[];
 }
 
-export default function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
+export default function ProtectedRoute({
+  children,
+  roles,
+}: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, hasRole } = useAuth();
 
   if (isLoading) {

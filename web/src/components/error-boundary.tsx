@@ -1,6 +1,6 @@
 import { Component, ReactNode, ErrorInfo } from "react";
 import { AlertTriangle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button.tsx";
 
 interface Props { children: ReactNode; resetKey?: string; }
 interface State { hasError: boolean; error: Error | null; }

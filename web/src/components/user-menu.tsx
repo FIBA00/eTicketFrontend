@@ -1,5 +1,5 @@
 import { LogOut, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +7,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useAuth } from "@/hooks/use-auth";
+} from "../components/ui/dropdown-menu.tsx";
+import { Avatar, AvatarFallback } from "../components/ui/avatar.tsx";
+import { useAuth } from "../modules/auth/hooks/use-auth.tsx";
+import React from "react";
 
 const roleLabels: Record<string, string> = {
   SYSTEM_ADMIN: "System Admin",

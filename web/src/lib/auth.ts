@@ -23,7 +23,7 @@ export interface RefreshResponse {
   expiresIn: number;
 }
 
-const API_BASE = "/api/v1";
+import {API_BASE} from "./api-config";  
 
 // Token storage — access token in memory (lost on refresh, re-fetch with refresh token)
 // Refresh token in localStorage (backend also sets httpOnly cookie, but we need it for mobile/POS)

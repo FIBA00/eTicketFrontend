@@ -3,7 +3,7 @@
     "jsx": "react",
     "incremental": true,
     "isolatedModules": true,
-    "lib": ["es2022"],
+    "lib": ["dom"],
     "module": "esnext",
     "noEmit": true,
     "moduleResolution": "bundler",

@@ -6,20 +6,25 @@ import {
   AlertTriangle,
   CheckCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button.tsx";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
+} from "../components/ui/popover.tsx";
+import { Badge } from "../components/ui/badge.tsx";
 import {
   getSyncStatus,
   syncNow,
   onSyncComplete,
   type SyncResult,
-} from "@/lib/sync-engine";
-import { getQueueLength, isOnline, onOnlineChange } from "@/lib/offline-queue";
+} from "../lib/sync-engine.ts";
+import {
+  getQueueLength,
+  isOnline,
+  onOnlineChange,
+} from "../lib/offline-queue.ts";
+import React from "react";
 
 export default function SyncStatus() {
   const [online, setOnline] = useState(isOnline());

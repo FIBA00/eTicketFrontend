@@ -13,10 +13,13 @@ import {
   Monitor,
 } from "lucide-react";
 import { Link } from "wouter";
-import { cn } from "@/lib/utils";
-import UserMenu from "@/components/user-menu";
-import { useAuth } from "@/hooks/use-auth";
-import SyncStatus from "@/components/sync-status";
+
+// ! internal imports
+import { cn } from "../lib/utils.ts";
+import { useAuth } from "../modules/auth/hooks/use-auth.tsx";
+import UserMenu from "../components/user-menu.tsx";
+import SyncStatus from "../components/sync-status.tsx";
+import React from "react";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },

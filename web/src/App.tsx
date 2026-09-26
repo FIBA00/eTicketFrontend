@@ -68,7 +68,7 @@ import LoginPage from "./modules/auth/pages/login.tsx";
 // import PublicDisplayPage from "@/pages/display-public";
 
 // // # components
-import ProtectedRoute from "./components/protected-route";
+import ProtectedRoute from "./components/protected-route.tsx";
 // import PageHeader from "./components/page-header.tsx";
 // import LoadingBlock from "./components/loading-block.tsx";
 // import QueryError from "./components/query-error.tsx";
@@ -81,22 +81,23 @@ import ProtectedRoute from "./components/protected-route";
 // import SettingValue from "./components/settings-value.tsx";
 // import UserMenu from "./components/user-menu";
 // import SyncStatus from "./components/sync-status";
-import Toaster from "./components/ui/toaster";
-import { TooltipProvider } from "./components/ui/tooltip";
+import Toaster from "./components/ui/toaster.tsx";
+import { TooltipProvider } from "./components/ui/tooltip.tsx";
 import { ErrorBoundary } from "./components/error-boundary.tsx";
 
 // // #  hooks
 // import { useAuth } from "./hooks/use-auth";
-import { AuthProvider } from "./hooks/use-auth";
+import { AuthProvider } from "./modules/auth/hooks/use-auth.tsx";
 
 // // # libs
-import { getAccessToken, refreshAccessToken } from "./lib/auth";
-import { setBaseUrl, setAuthTokenGetter } from "./lib/api-config";
-import { initAutoSync } from "./lib/sync-engine";
+import { getAccessToken, refreshAccessToken } from "./lib/auth.ts";
+import { setBaseUrl,getBaseUrl, setAuthTokenGetter } from "./lib/api-config.ts";
+import { initAutoSync } from "./lib/sync-engine.ts";
 
 // # utils
 
 import React from "react";
+import { env } from "process";
 const queryClient = new QueryClient();
 
 function Router() {
@@ -247,10 +248,12 @@ function Router() {
   );
 }
 
+
 function App() {
   // Wire auth token getter into the generated API client
   useEffect(() => {
-    setBaseUrl(import.meta.env.VITE_API_URL ?? "http://localhost:3000");
+	let baseUrl = getBaseUrl(); // Ensure base URL is set
+    setBaseUrl( "http://localhost:8000");
     setAuthTokenGetter(async () => {
       let token = getAccessToken();
       if (!token) {

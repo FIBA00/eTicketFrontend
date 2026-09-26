@@ -1,4 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
+import React from "react";
+import { Card, CardContent } from "../components/ui/card.tsx";
 import { AlertCircle } from "lucide-react";
 
 export default function NotFound() {
