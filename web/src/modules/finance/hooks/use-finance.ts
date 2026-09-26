@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // ! internal imports
-import { authFetch } from "../lib/auth.ts";
+import { authFetch } from "../../../lib/auth.ts";
 import {
   RevenueReport,
   Withdrawal,
   Commission,
   DailyAudit,
-} from "../lib/shared/types/finance.types.ts";
+} from "../../../lib/shared/types/finance.types.ts";
 
 // ── Queries ──────────────────────────────────────────────────
 

@@ -1,11 +1,22 @@
 import { ReactNode } from "react";
 import { useLocation } from "wouter";
-import { LayoutDashboard, Ticket, ClipboardList, BarChart3, Building2, Bus, Route, Users, Settings, Monitor } from "lucide-react";
+import {
+  LayoutDashboard,
+  Ticket,
+  ClipboardList,
+  BarChart3,
+  Building2,
+  Bus,
+  Route,
+  Users,
+  Settings,
+  Monitor,
+} from "lucide-react";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
-import UserMenu  from "@/components/user-menu";
+import UserMenu from "@/components/user-menu";
 import { useAuth } from "@/hooks/use-auth";
-import SyncStatus  from "@/components/sync-status";
+import SyncStatus from "@/components/sync-status";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -31,21 +42,27 @@ export function AppShell({ children }: { children: ReactNode }) {
           <h1 className="text-xl font-bold">E-Ticket</h1>
         </div>
         <nav className="space-y-1 p-4">
-          {navItems.filter((item) => !item.adminOnly || hasRole("SYSTEM_ADMIN")).map((item) => {
-            const Icon = item.icon;
-            const isActive = location === item.href;
-            return (
-              <Link key={item.href} href={item.href}>
-                <div className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
-                  isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}>
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </div>
-              </Link>
-            );
-          })}
+          {navItems
+            .filter((item) => !item.adminOnly || hasRole("SYSTEM_ADMIN"))
+            .map((item) => {
+              const Icon = item.icon;
+              const isActive = location === item.href;
+              return (
+                <Link key={item.href} href={item.href}>
+                  <div
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {item.label}
+                  </div>
+                </Link>
+              );
+            })}
         </nav>
       </aside>
       <div className="pl-64">

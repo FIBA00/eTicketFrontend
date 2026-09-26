@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // ! internal imports
-import { authFetch } from "../lib/auth.ts";
+import { authFetch } from "../../../lib/auth.ts";
 import {
   IssueBatchInput,
   IssueTicketInput,
@@ -9,7 +9,7 @@ import {
   BatchSummary,
   BatchResult,
   Ticket,
-} from "../lib/shared/types/ticket.types";
+} from "../../../lib/shared/types/ticket.types.ts";
 
 // ── Queries ──────────────────────────────────────────────────
 

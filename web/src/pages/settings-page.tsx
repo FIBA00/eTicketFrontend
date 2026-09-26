@@ -1,8 +1,30 @@
+import React, { useState } from "react";
+import {
+  AUTO_SYNC_KEY,
+  isAutoSyncEnabled,
+  STATION_CODE,
+  STATION_NAME,
+  useOnlineStatus,
+  useQueueCount,
+} from "../lib/utils";
+import PageHeader from "../components/page-header";
+import {
+  Check,
+  CircleHelp,
+  Cloud,
+  CloudOff,
+  Landmark,
+  Languages,
+  ShieldCheck,
+  Wifi,
+} from "lucide-react";
+import SettingValue from "../components/settings-value";
+
 export default function SettingsPage() {
   const online = useOnlineStatus();
   const queueCount = useQueueCount();
   const [language, setLanguage] = useState("English");
-  const [autoSync, setAutoSync] = useState(isAutoSyncEnabled);
+  const [autoSync, setAutoSync] = useState(isAutoSyncEnabled());
   const [saved, setSaved] = useState(false);
   const save = () => {
     setSaved(true);

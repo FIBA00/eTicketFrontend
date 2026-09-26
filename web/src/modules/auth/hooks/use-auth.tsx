@@ -6,6 +6,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
+
+import React from "react";
+
+// ! internal imports
 import {
   login as apiLogin,
   logout as apiLogout,
@@ -14,8 +18,7 @@ import {
   setUser,
   type LoginRequest,
   type LoginResponse,
-} from "../lib/auth.ts";
-import React from "react";
+} from "../../../lib/auth.ts";
 
 interface AuthContextValue {
   user: LoginResponse["user"] | null;

@@ -1,63 +1,61 @@
 import {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-	type FormEvent,
-	type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
 } from "react";
 
 import {
-	QueryClient,
-	QueryClientProvider,
-	useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { Link, Route, Switch, useLocation } from "wouter";
 import {
-	AlertCircle,
-	ArrowDownToLine,
-	ArrowRight,
-	Banknote,
-	BarChart3,
-	Check,
-	ChevronDown,
-	CircleHelp,
-	ClipboardList,
-	Cloud,
-	CloudOff,
-	Landmark,
-	LayoutDashboard,
-	Menu,
-	Printer,
-	ReceiptText,
-	RefreshCw,
-	Search,
-	Send,
-	Settings,
-	ShieldCheck,
-	SlidersHorizontal,
-	Ticket,
-	TrainFront,
-	Wifi,
-	Building2,
-	Bus,
-	Users,
+  AlertCircle,
+  ArrowDownToLine,
+  ArrowRight,
+  Banknote,
+  BarChart3,
+  Check,
+  ChevronDown,
+  CircleHelp,
+  ClipboardList,
+  Cloud,
+  CloudOff,
+  Landmark,
+  LayoutDashboard,
+  Menu,
+  Printer,
+  ReceiptText,
+  RefreshCw,
+  Search,
+  Send,
+  Settings,
+  ShieldCheck,
+  SlidersHorizontal,
+  Ticket,
+  TrainFront,
+  Wifi,
+  Building2,
+  Bus,
+  Users,
 } from "lucide-react";
 
 // ! internal imports
 
-import AppShell from "@/pages/app-shell.tsx";
-import HomePage from "@/pages/home-page.tsx";
-import NotFound from "@/pages/not-found";
-
-
+import AppShell from "./pages/app-shell.tsx";
+import HomePage from "./pages/home-page.tsx";
+import NotFound from "./pages/not-found.tsx";
 
 // import TicketingPage from "@/pages/ticketing-page.tsx";
 // import TicketsPage from "@/pages/tickets-page.tsx";
 // import RevenuePage from "@/pages/revenue-page.tsx";
 // import SettingsPage from "@/pages/settings-page.tsx";
-import LoginPage from "./pages/login.tsx";
+import LoginPage from "./modules/auth/pages/login.tsx";
 // import StationsPage from "@/pages/stations";
 // import VehiclesPage from "@/pages/vehicles";
 // import RoutesPage from "@/pages/routes";
@@ -70,56 +68,55 @@ import LoginPage from "./pages/login.tsx";
 // import PublicDisplayPage from "@/pages/display-public";
 
 // // # components
-import ProtectedRoute from "@/components/protected-route";
-// import PageHeader from "@/components/page-header.tsx";
-// import LoadingBlock from "@/components/loading-block.tsx";
-// import QueryError from "@/components/query-error.tsx";
-// import EmptyState from "@/components/empty-state.tsx";
-// import MetricCard from "@/components/metric-card.tsx";
-// import SectionLabel from "@/components/section-label.tsx";
-// import TicketRow from "@/components/ticket-row.tsx";
-// import BreakdownRow from "@/components/breakdown-row.tsx";
-// import QueuedRegister from "@/components/queued-register.tsx";
-// import SettingValue from "@/components/settings-value.tsx";
-// import UserMenu from "@/components/user-menu";
-// import SyncStatus from "@/components/sync-status";
-import Toaster from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import {ErrorBoundary} from "@/components/error-boundary.tsx";
+import ProtectedRoute from "./components/protected-route";
+// import PageHeader from "./components/page-header.tsx";
+// import LoadingBlock from "./components/loading-block.tsx";
+// import QueryError from "./components/query-error.tsx";
+// import EmptyState from "./components/empty-state.tsx";
+// import MetricCard from "./components/metric-card.tsx";
+// import SectionLabel from "./components/section-label.tsx";
+// import TicketRow from "./components/ticket-row.tsx";
+// import BreakdownRow from "./components/breakdown-row.tsx";
+// import QueuedRegister from "./components/queued-register.tsx";
+// import SettingValue from "./components/settings-value.tsx";
+// import UserMenu from "./components/user-menu";
+// import SyncStatus from "./components/sync-status";
+import Toaster from "./components/ui/toaster";
+import { TooltipProvider } from "./components/ui/tooltip";
+import { ErrorBoundary } from "./components/error-boundary.tsx";
 
 // // #  hooks
-// import { useAuth } from "@/hooks/use-auth";
-import { AuthProvider } from "@/hooks/use-auth";
+// import { useAuth } from "./hooks/use-auth";
+import { AuthProvider } from "./hooks/use-auth";
 
 // // # libs
-import { getAccessToken, refreshAccessToken } from "@/lib/auth";
-import { setBaseUrl, setAuthTokenGetter } from "@/lib/api-config";
-import { initAutoSync } from "@/lib/sync-engine";
+import { getAccessToken, refreshAccessToken } from "./lib/auth";
+import { setBaseUrl, setAuthTokenGetter } from "./lib/api-config";
+import { initAutoSync } from "./lib/sync-engine";
 
 // # utils
-
 
 import React from "react";
 const queryClient = new QueryClient();
 
 function Router() {
-	const [location] = useLocation();
-	return (
-		<ErrorBoundary resetKey={location}>
-			<Switch>
-				<Route path="/login" component={LoginPage} />
-				
-				<Route path="/">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<HomePage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				
-				{/*
+  const [location] = useLocation();
+  return (
+    <ErrorBoundary resetKey={location}>
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+
+        <Route path="/">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <HomePage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        {/*
 				
 				<Route path="/ticketing">
 					{() => (
@@ -244,40 +241,40 @@ function Router() {
 					{() => <PublicDisplayPage />}
 				</Route> */}
 
-				<Route component={NotFound} />
-			</Switch>
-		</ErrorBoundary>
-	);
+        <Route component={NotFound} />
+      </Switch>
+    </ErrorBoundary>
+  );
 }
 
 function App() {
-	// Wire auth token getter into the generated API client
-	useEffect(() => {
-		setBaseUrl(import.meta.env.VITE_API_URL ?? "http://localhost:3000");
-		setAuthTokenGetter(async () => {
-			let token = getAccessToken();
-			if (!token) {
-				const ok = await refreshAccessToken();
-				if (ok) token = getAccessToken();
-			}
-			return token;
-		});
+  // Wire auth token getter into the generated API client
+  useEffect(() => {
+    setBaseUrl(import.meta.env.VITE_API_URL ?? "http://localhost:3000");
+    setAuthTokenGetter(async () => {
+      let token = getAccessToken();
+      if (!token) {
+        const ok = await refreshAccessToken();
+        if (ok) token = getAccessToken();
+      }
+      return token;
+    });
 
-		// Initialize auto-sync for offline queue
-		const cleanup = initAutoSync();
-		return cleanup;
-	}, []);
+    // Initialize auto-sync for offline queue
+    const cleanup = initAutoSync();
+    return cleanup;
+  }, []);
 
-	return (
-		<QueryClientProvider client={queryClient}>
-			<TooltipProvider>
-				<AuthProvider>
-					<Toaster />
-					<Router />
-				</AuthProvider>
-			</TooltipProvider>
-		</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <Toaster />
+          <Router />
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;
