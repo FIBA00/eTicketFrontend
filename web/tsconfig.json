@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "incremental": true,
     "isolatedModules": true,
     "lib": ["es2022"],
     "module": "esnext",
+    "noEmit": true,
     "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,6 +19,7 @@
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
     "useUnknownInCatchVariables": true,
+    "allowImportingTsExtensions": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
     "target": "es2022",

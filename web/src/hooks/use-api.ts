@@ -1,60 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { authFetch } from "@/lib/auth";
 
-// ── Types (matching backend v2) ──────────────────────────────
 
-export interface Station {
-  id: string;
-  name: string;
-  code: string;
-  city: string;
-  region: string;
-  latitude: number | null;
-  longitude: number | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Vehicle {
-  id: string;
-  plateNumber: string;
-  type: "BUS" | "MINIBUS" | "COASTER";
-  capacity: number;
-  agentId: string;
-  stationId: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  agent?: { id: string; fullName: string; username: string };
-  station?: { id: string; name: string; code: string };
-}
-
-export interface Route {
-  id: string;
-  originStationId: string;
-  destinationStationId: string;
-  distanceKm: number;
-  baseFareCents: number;
-  estimatedMinutes: number | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  originStation?: { id: string; name: string; code: string; city: string };
-  destinationStation?: { id: string; name: string; code: string; city: string };
-}
-
-export interface User {
-  id: string;
-  username: string;
-  fullName: string;
-  phone: string | null;
-  role: "SYSTEM_ADMIN" | "AGENT" | "TICKETER" | "STATION_CONTROLLER";
-  stationId: string | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+// ! internal imports
+import { authFetch } from "../lib/auth.ts";
+import {User, Route, Vehicle, Station} from "../lib/shared/types/api.types.ts";
 
 // ── Stations API ─────────────────────────────────────────────
 

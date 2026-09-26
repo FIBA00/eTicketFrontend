@@ -57,7 +57,7 @@ import NotFound from "@/pages/not-found";
 // import TicketsPage from "@/pages/tickets-page.tsx";
 // import RevenuePage from "@/pages/revenue-page.tsx";
 // import SettingsPage from "@/pages/settings-page.tsx";
-import LoginPage from "@/pages/login";
+import LoginPage from "./pages/login.tsx";
 // import StationsPage from "@/pages/stations";
 // import VehiclesPage from "@/pages/vehicles";
 // import RoutesPage from "@/pages/routes";
@@ -98,29 +98,8 @@ import { initAutoSync } from "@/lib/sync-engine";
 
 // # utils
 
-import {
-	QUEUE_KEY,
-	AUTO_SYNC_KEY,
-	STATION_NAME,
-	STATION_CODE,
-	VEHICLES,
-	ROUTES,
-} from "@/lib/utils.ts";
 
-import {
-	readQueue,
-	writeQueue,
-	queueTicket,
-	isAutoSyncEnabled,
-	currency,
-	shortDate,
-	errorMessage,
-	useOnlineStatus,
-	useQueueCount,
-	useLocalQueue,
-	useOfflineSync,
-	makeTicket,
-} from "@/lib/utils.ts";
+import React from "react";
 const queryClient = new QueryClient();
 
 function Router() {

@@ -1,43 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { authFetch } from "@/lib/auth";
 
-export interface DisplayVehicle {
-  id: string;
-  plateNumber: string;
-  type: string;
-  capacity: number;
-  status: "ARRIVING" | "BOARDING" | "DEPARTED";
-  route: {
-    origin: string;
-    destination: string;
-    distanceKm: number;
-  };
-  departureTime: string;
-  availableSeats: number;
-  totalSeats: number;
-}
-
-export interface StationDisplay {
-  station: {
-    id: string;
-    name: string;
-    code: string;
-  };
-  incoming: DisplayVehicle[];
-  active: DisplayVehicle[];
-  departed: DisplayVehicle[];
-  lastUpdated: string;
-}
-
-export interface StationSummary {
-  station: {
-    id: string;
-    name: string;
-    code: string;
-  };
-  vehicleCount: number;
-  lastUpdated: string;
-}
+// ! internal imports
+import { authFetch } from "../lib/auth.ts";
+import {StationSummary, DisplayVehicle, StationDisplay} from "../lib/shared/types/api.types.ts";
 
 export function useStationDisplay(stationId: string | null) {
   return useQuery({

@@ -11,7 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../hooks/use-auth.ts";
+import React from "react";
 
 export default function LoginPage() {
   const [, setLocation] = useLocation();

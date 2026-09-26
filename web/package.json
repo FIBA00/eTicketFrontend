@@ -81,7 +81,6 @@
     "zod": "catalog:"
   },
   "dependencies": {
-    "eslint": "^10.11.0",
     "prettier": "^3.9.9"
   }
 }
