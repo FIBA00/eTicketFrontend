@@ -4,6 +4,7 @@ import {
   getRefreshToken,
   setTokens,
   clearTokens,
+  setUser,
 } from "@/auth/tokens";
 
 const API_URL =

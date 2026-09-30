@@ -6,6 +6,8 @@ import {
   getPendingMutations,
   isOnline,
   onOnlineChange,
+  addToQueue,
+  generateMutationId,
   type QueuedMutation,
 } from "./offline-queue";
 
@@ -201,14 +203,14 @@ export function initAutoSync(): () => void {
 export function queueTicketIssue(ticketData: {
   routeId: string;
   vehicleId: string;
-  passengerName: string;
+  passengerName?: string;
   passengerPhone?: string;
-  seatNumber: number;
+  driverName?: string;
+  seatNumber?: number;
   departureDate: string;
-  ticketerId: string;
-  stationId: string;
+  ticketerId?: string;
+  stationId?: string;
 }): string {
-  const { addToQueue, generateMutationId } = require("./offline-queue");
   const mutationId = generateMutationId();
 
   addToQueue({

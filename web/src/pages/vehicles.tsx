@@ -99,7 +99,7 @@ export default function VehiclesPage() {
 
     const data = {
       plateNumber: form.plateNumber.toUpperCase(),
-      type: form.type,
+      type: form.type as "BUS" | "MINIBUS" | "COASTER",
       capacity: parseInt(form.capacity, 10),
       agentId: form.agentId,
       stationId: form.stationId,

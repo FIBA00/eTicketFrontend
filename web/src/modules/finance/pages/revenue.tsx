@@ -38,12 +38,19 @@ import {
   type DailyAudit,
 } from "@/hooks/use-finance";
 import { useAuth } from "@/hooks/use-auth";
+import { useStations } from "@/hooks/use-api";
 import { formatCents } from "@/lib/money-utils";
 
 export default function RevenuePage() {
   const { user, hasRole } = useAuth();
   const isAdmin = hasRole("SYSTEM_ADMIN", "STATION_CONTROLLER");
   const isTicketer = hasRole("TICKETER");
+
+  const { data: stations } = useStations();
+  const [selectedStationId, setSelectedStationId] = useState<string>("");
+
+  const activeStationId =
+    selectedStationId || user?.stationId || stations?.[0]?.id || "";
 
   const [auditDate, setAuditDate] = useState(
     new Date().toISOString().split("T")[0],
@@ -56,13 +63,20 @@ export default function RevenuePage() {
   );
 
   // Data fetching
-  const { data: todayAudit, refetch: refetchAudit } = useDailyAudit(auditDate);
+  const { data: todayAudit, refetch: refetchAudit } = useDailyAudit(
+    auditDate,
+    activeStationId,
+  );
   const generateAudit = useGenerateAudit();
-  const { data: auditHistory } = useAuditHistory(30);
+  const { data: auditHistory } = useAuditHistory(30, activeStationId);
   const { data: commission } = useCommission();
   const { data: withdrawals } = useWithdrawalHistory();
   const requestWithdrawal = useRequestWithdrawal();
-  const { data: revenue } = useRevenueReport(revenueStart, revenueEnd);
+  const { data: revenue } = useRevenueReport(
+    revenueStart,
+    revenueEnd,
+    activeStationId,
+  );
 
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [withdrawError, setWithdrawError] = useState("");
@@ -70,7 +84,10 @@ export default function RevenuePage() {
 
   async function handleGenerateAudit() {
     try {
-      await generateAudit.mutateAsync(auditDate);
+      await generateAudit.mutateAsync({
+        date: auditDate,
+        stationId: activeStationId || undefined,
+      });
       refetchAudit();
     } catch (err) {
       console.error("Audit generation failed:", err);
@@ -142,6 +159,23 @@ export default function RevenuePage() {
                     </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
+                    {isAdmin && stations && stations.length > 0 && (
+                      <Select
+                        value={activeStationId}
+                        onValueChange={setSelectedStationId}
+                      >
+                        <SelectTrigger className="w-52">
+                          <SelectValue placeholder="Select station" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {stations.map((s) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              {s.name} ({s.code})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                     <Input
                       type="date"
                       value={auditDate}
@@ -424,6 +458,23 @@ export default function RevenuePage() {
                     <CardDescription>Station revenue over time</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
+                    {isAdmin && stations && stations.length > 0 && (
+                      <Select
+                        value={activeStationId}
+                        onValueChange={setSelectedStationId}
+                      >
+                        <SelectTrigger className="w-52">
+                          <SelectValue placeholder="Select station" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {stations.map((s) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              {s.name} ({s.code})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                     <Input
                       type="date"
                       value={revenueStart}

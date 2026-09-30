@@ -1,4 +1,4 @@
-import * as SQLite from "react-native-sqlite-storage";
+import * as SQLite from "expo-sqlite";
 import { CREATE_TABLES, SCHEMA_VERSION } from "./schema";
 
 let db: SQLite.SQLiteDatabase | null = null;
@@ -40,7 +40,10 @@ export async function insertLocalTicket(ticket: {
   vehicleId: string;
   passengerName: string;
   passengerPhone?: string;
-  seatNumber: number;
+  seatNumber?: number | null;
+  driverName?: string | null;
+  batchId?: string | null;
+  batchSequence?: number | null;
   departureDate: string;
   fareCents: number;
   serviceChargeCents: number;
@@ -55,19 +58,22 @@ export async function insertLocalTicket(ticket: {
   const database = await getDb();
   await database.runAsync(
     `INSERT INTO local_tickets (
-      id, ticket_number, route_id, vehicle_id, passenger_name, passenger_phone,
-      seat_number, departure_date, fare_cents, service_charge_cents,
+      id, ticket_number, route_id, vehicle_id, driver_name, passenger_name, passenger_phone,
+      seat_number, batch_id, batch_sequence, departure_date, fare_cents, service_charge_cents,
       station_fee_cents, vat_cents, total_cents, commission_cents,
       ticketer_id, station_id, client_mutation_id, issued_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
     [
       ticket.id,
       ticket.ticketNumber,
       ticket.routeId,
       ticket.vehicleId,
+      ticket.driverName ?? null,
       ticket.passengerName,
       ticket.passengerPhone ?? null,
-      ticket.seatNumber,
+      ticket.seatNumber ?? null,
+      ticket.batchId ?? null,
+      ticket.batchSequence ?? null,
       ticket.departureDate,
       ticket.fareCents,
       ticket.serviceChargeCents,
@@ -80,6 +86,63 @@ export async function insertLocalTicket(ticket: {
       ticket.clientMutationId,
     ]
   );
+}
+
+export async function insertLocalBatch(batch: {
+  batchId: string;
+  tickets: Array<{
+    id: string;
+    ticketNumber: string;
+    routeId: string;
+    vehicleId: string;
+    driverName: string;
+    passengerName: string;
+    batchSequence: number;
+    departureDate: string;
+    fareCents: number;
+    serviceChargeCents: number;
+    stationFeeCents: number;
+    vatCents: number;
+    totalCents: number;
+    commissionCents: number;
+    ticketerId: string;
+    stationId: string;
+    clientMutationId: string;
+  }>;
+}): Promise<void> {
+  const database = await getDb();
+  await database.withTransactionAsync(async () => {
+    for (const ticket of batch.tickets) {
+      await database.runAsync(
+        `INSERT INTO local_tickets (
+          id, ticket_number, route_id, vehicle_id, driver_name, passenger_name, passenger_phone,
+          seat_number, batch_id, batch_sequence, departure_date, fare_cents, service_charge_cents,
+          station_fee_cents, vat_cents, total_cents, commission_cents,
+          ticketer_id, station_id, client_mutation_id, issued_at
+        ) VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+        [
+          ticket.id,
+          ticket.ticketNumber,
+          ticket.routeId,
+          ticket.vehicleId,
+          ticket.driverName,
+          ticket.passengerName,
+          batch.batchId,
+          ticket.batchSequence,
+          ticket.departureDate,
+          ticket.fareCents,
+          ticket.serviceChargeCents,
+          ticket.stationFeeCents,
+          ticket.vatCents,
+          ticket.totalCents,
+          ticket.commissionCents,
+          ticket.ticketerId,
+          ticket.stationId,
+          ticket.clientMutationId,
+        ]
+      );
+    }
+  });
 }
 
 export async function getPendingTickets(): Promise<
@@ -208,7 +271,7 @@ export async function getReservedSeats(
     "SELECT seat_number FROM seat_reservations WHERE vehicle_id = ? AND departure_date = ?",
     [vehicleId, departureDate]
   );
-  return results.map((r) => r.seat_number);
+  return results.map((r: { seat_number: number }) => r.seat_number);
 }
 
 // ── Stats ────────────────────────────────────────────────────

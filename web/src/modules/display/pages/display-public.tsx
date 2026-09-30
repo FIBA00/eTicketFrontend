@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "wouter";
 import { Clock, MapPin, Users } from "lucide-react";
-import { usePublicStationDisplay } from "@/hooks/use-display";
+import { usePublicStationDisplay, type DisplayVehicle } from "@/hooks/use-display";
 
 // Full-screen public display for TV/monitors at stations
 // No login required — accessible via /display/public/:stationId
@@ -82,7 +82,7 @@ export default function PublicDisplayPage() {
             NOW BOARDING
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {display.active.map((vehicle) => (
+            {display.active.map((vehicle: DisplayVehicle) => (
               <BoardingCard key={vehicle.id} vehicle={vehicle} large />
             ))}
           </div>
@@ -96,7 +96,7 @@ export default function PublicDisplayPage() {
             ARRIVING SOON
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {display.incoming.map((vehicle) => (
+            {display.incoming.map((vehicle: DisplayVehicle) => (
               <BoardingCard key={vehicle.id} vehicle={vehicle} />
             ))}
           </div>
@@ -110,7 +110,7 @@ export default function PublicDisplayPage() {
             RECENTLY DEPARTED
           </h2>
           <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-5">
-            {display.departed.map((vehicle) => (
+            {display.departed.map((vehicle: DisplayVehicle) => (
               <DepartedCard key={vehicle.id} vehicle={vehicle} />
             ))}
           </div>

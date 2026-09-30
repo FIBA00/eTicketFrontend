@@ -133,7 +133,7 @@ export default function TicketDetailPage() {
                 ticketNumber: ticket.ticketNumber,
                 passengerName: ticket.passengerName,
                 passengerPhone: ticket.passengerPhone ?? undefined,
-                seatNumber: ticket.seatNumber,
+                seatNumber: ticket.seatNumber ?? ticket.batchSequence ?? 1,
                 departureDate: ticket.departureDate,
                 departureTime: ticket.departureDate,
                 route: {
@@ -241,7 +241,7 @@ export default function TicketDetailPage() {
               <TicketIcon className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-sm text-muted-foreground">Seat Number</p>
-                <p className="font-medium text-lg">#{ticket.seatNumber}</p>
+                <p className="font-medium text-lg">#{ticket.seatNumber ?? ticket.batchSequence ?? 1}</p>
               </div>
             </div>
           </CardContent>

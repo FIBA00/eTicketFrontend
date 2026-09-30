@@ -10,6 +10,14 @@ import {
   BatchResult,
   Ticket,
 } from "../../../lib/shared/types/ticket.types.ts";
+export type {
+  IssueBatchInput,
+  IssueTicketInput,
+  VerifyResult,
+  BatchSummary,
+  BatchResult,
+  Ticket,
+};
 
 // ── Queries ──────────────────────────────────────────────────
 

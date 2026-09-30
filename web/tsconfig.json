@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-jsx",
     "incremental": true,
     "isolatedModules": true,
-    "lib": ["dom"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "noEmit": true,
     "moduleResolution": "bundler",
@@ -23,7 +23,10 @@
     "alwaysStrict": true,
     "skipLibCheck": true,
     "target": "es2022",
-    "types": [],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["vitest/globals", "node"]
     // "customConditions": ["workspace"]
   }
 }

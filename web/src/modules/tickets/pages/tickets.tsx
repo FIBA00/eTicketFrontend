@@ -36,7 +36,7 @@ export default function TicketsPage() {
     return (
       t.ticketNumber.toLowerCase().includes(q) ||
       t.passengerName.toLowerCase().includes(q) ||
-      t.seatNumber.toString().includes(q)
+      (t.seatNumber ?? t.batchSequence ?? "").toString().includes(q)
     );
   });
 
@@ -78,7 +78,7 @@ export default function TicketsPage() {
       header: "Seat",
       render: (t: Ticket) => (
         <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-muted text-xs font-medium">
-          {t.seatNumber}
+          {t.seatNumber ?? t.batchSequence ?? "—"}
         </span>
       ),
     },

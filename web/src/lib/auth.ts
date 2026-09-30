@@ -28,8 +28,16 @@ import {API_BASE} from "./api-config";
 // Token storage — access token in memory (lost on refresh, re-fetch with refresh token)
 // Refresh token in localStorage (backend also sets httpOnly cookie, but we need it for mobile/POS)
 let accessToken: string | null = null;
-let refreshToken: string | null = localStorage.getItem("refreshToken");
-let currentUser: LoginResponse["user"] | null = null;
+let refreshToken: string | null = typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null;
+let currentUser: LoginResponse["user"] | null = (() => {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+})();
 
 export function getAccessToken(): string | null {
   return accessToken;
@@ -42,18 +50,30 @@ export function getCurrentUser() {
 export function setTokens(access: string, refresh: string) {
   accessToken = access;
   refreshToken = refresh;
-  localStorage.setItem("refreshToken", refresh);
+  if (typeof window !== "undefined") {
+    localStorage.setItem("refreshToken", refresh);
+  }
 }
 
-export function setUser(user: LoginResponse["user"]) {
+export function setUser(user: LoginResponse["user"] | null) {
   currentUser = user;
+  if (typeof window !== "undefined") {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }
 }
 
 export function clearAuth() {
   accessToken = null;
   refreshToken = null;
   currentUser = null;
-  localStorage.removeItem("refreshToken");
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+  }
 }
 
 export async function login(credentials: LoginRequest): Promise<LoginResponse> {

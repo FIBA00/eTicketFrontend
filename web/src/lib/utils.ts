@@ -1,86 +1,15 @@
-import { twMerge } from "tailwind-merge";
-
+import { useState, useEffect } from "react";
 import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { getQueue } from "./offline-queue";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const ROUTES: RouteOption[] = [
-  {
-    id: "RT-014",
-    name: "Addis Ababa → Adama",
-    origin: "Addis Ababa",
-    destination: "Adama",
-    distanceKm: 99,
-    fareETB: 125,
-  },
-  {
-    id: "RT-021",
-    name: "Addis Ababa → Debre Zeit",
-    origin: "Addis Ababa",
-    destination: "Debre Zeit",
-    distanceKm: 45,
-    fareETB: 72,
-  },
-  {
-    id: "RT-033",
-    name: "Adama → Dire Dawa",
-    origin: "Adama",
-    destination: "Dire Dawa",
-    distanceKm: 453,
-    fareETB: 480,
-  },
-  {
-    id: "RT-041",
-    name: "Bahir Dar → Gondar",
-    origin: "Bahir Dar",
-    destination: "Gondar",
-    distanceKm: 180,
-    fareETB: 220,
-  },
-  {
-    id: "RT-008",
-    name: "Hawassa → Shashemene",
-    origin: "Hawassa",
-    destination: "Shashemene",
-    distanceKm: 27,
-    fareETB: 48,
-  },
-];
-
-export const VEHICLES = [
-  { plate: "3-AB-4901", operator: "Yonas M." },
-  { plate: "4-AA-2107", operator: "Hanna K." },
-  { plate: "3-OR-7714", operator: "Abel T." },
-  { plate: "2-BA-3088", operator: "Mulugeta G." },
-];
-
-export const QUEUE_KEY = "transit-eticket-queue";
 export const AUTO_SYNC_KEY = "transit-eticket-auto-sync";
 export const STATION_NAME = "Addis Ababa Central";
 export const STATION_CODE = "ST-AA";
-
-export function readQueue(): TicketInput[] {
-  try {
-    const raw = window.localStorage.getItem(QUEUE_KEY);
-    return raw ? (JSON.parse(raw) as TicketInput[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-export function writeQueue(queue: TicketInput[]) {
-  window.localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
-  window.dispatchEvent(new Event("transit-queue-changed"));
-}
-
-export function queueTicket(ticket: TicketInput) {
-  const queue = readQueue();
-  if (!queue.some((item) => item.id === ticket.id)) {
-    writeQueue([...queue, ticket]);
-  }
-}
 
 export function isAutoSyncEnabled() {
   return (
@@ -127,121 +56,18 @@ export function useOnlineStatus() {
 
 export function useQueueCount() {
   const [count, setCount] = useState(() =>
-    typeof window === "undefined" ? 0 : readQueue().length,
+    typeof window === "undefined" ? 0 : getQueue().length,
   );
   useEffect(() => {
-    const update = () => setCount(readQueue().length);
-    window.addEventListener("transit-queue-changed", update);
+    const update = () => setCount(getQueue().length);
+    window.addEventListener("storage", update);
     window.addEventListener("online", update);
+    const interval = setInterval(update, 2000);
     return () => {
-      window.removeEventListener("transit-queue-changed", update);
+      window.removeEventListener("storage", update);
       window.removeEventListener("online", update);
+      clearInterval(interval);
     };
   }, []);
   return count;
-}
-
-export function useLocalQueue() {
-  const [queue, setQueue] = useState<TicketInput[]>(() =>
-    typeof window === "undefined" ? [] : readQueue(),
-  );
-  useEffect(() => {
-    const update = () => setQueue(readQueue());
-    window.addEventListener("transit-queue-changed", update);
-    window.addEventListener("storage", update);
-    return () => {
-      window.removeEventListener("transit-queue-changed", update);
-      window.removeEventListener("storage", update);
-    };
-  }, []);
-  return queue;
-}
-
-export function useOfflineSync(online: boolean, queueCount: number) {
-  const queryClient = useQueryClient();
-  const createTicket = useCreateTicket();
-  const mutateAsyncRef = useRef(createTicket.mutateAsync);
-  const syncingRef = useRef(false);
-  const [syncing, setSyncing] = useState(false);
-  const [syncError, setSyncError] = useState(false);
-  const [enabled, setEnabled] = useState(isAutoSyncEnabled);
-  mutateAsyncRef.current = createTicket.mutateAsync;
-  useEffect(() => {
-    const update = () => setEnabled(isAutoSyncEnabled());
-    window.addEventListener("transit-settings-changed", update);
-    return () => window.removeEventListener("transit-settings-changed", update);
-  }, []);
-  const sync = useCallback(
-    async (manual = false) => {
-      if (
-        !online ||
-        (!enabled && !manual) ||
-        syncingRef.current ||
-        queueCount === 0
-      )
-        return;
-      const queue = readQueue();
-      if (!queue.length) return;
-      syncingRef.current = true;
-      setSyncing(true);
-      setSyncError(false);
-      let failed = false;
-      for (const ticket of queue) {
-        try {
-          await mutateAsyncRef.current({ data: ticket });
-          const remaining = readQueue().filter((item) => item.id !== ticket.id);
-          writeQueue(remaining);
-        } catch {
-          failed = true;
-          break;
-        }
-      }
-      await queryClient.invalidateQueries({
-        queryKey: getGetTicketsQueryKey(),
-      });
-      await queryClient.invalidateQueries({
-        queryKey: getGetTicketSummaryQueryKey(),
-      });
-      syncingRef.current = false;
-      setSyncing(false);
-      setSyncError(failed);
-    },
-    [enabled, online, queryClient, queueCount],
-  );
-  useEffect(() => {
-    void sync();
-  }, [sync]);
-  return { syncing, syncError, syncNow: () => sync(true) };
-}
-
-export function makeTicket(
-  route: RouteOption,
-  vehiclePlate: string,
-): TicketInput {
-  const serviceChargeRate = route.distanceKm < 50 ? 0.05 : 0.04;
-  const serviceChargeETB = Number(
-    (route.fareETB * serviceChargeRate).toFixed(2),
-  );
-  const vatETB = Number((serviceChargeETB * 0.15).toFixed(2));
-  const stationFeeETB = Number((serviceChargeETB * 0.1).toFixed(2));
-  const ticketerCommissionETB = Number((serviceChargeETB * 0.05).toFixed(2));
-  const totalETB = Number(
-    (route.fareETB + serviceChargeETB + vatETB + stationFeeETB).toFixed(2),
-  );
-  return {
-    id: `TKT-${new Date().toISOString().replace(/\D/g, "").slice(0, 14)}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
-    routeId: route.id,
-    origin: route.origin,
-    destination: route.destination,
-    distanceKm: route.distanceKm,
-    fareETB: route.fareETB,
-    serviceChargeRate,
-    serviceChargeETB,
-    vatETB,
-    stationFeeETB,
-    totalETB,
-    ticketerCommissionETB,
-    vehiclePlate,
-    issuedAt: new Date().toISOString(),
-  };
 }

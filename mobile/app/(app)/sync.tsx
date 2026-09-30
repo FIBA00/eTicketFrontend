@@ -105,7 +105,7 @@ export default function SyncScreen() {
         {queue?.length === 0 ? (
           <Text style={styles.emptyText}>Queue is empty</Text>
         ) : (
-          queue?.slice(0, 10).map((item) => (
+          queue?.slice(0, 10).map((item: any) => (
             <View key={item.id} style={styles.queueItem}>
               <Text style={styles.queueTable}>{item.table_name}</Text>
               <Text style={styles.queueOp}>{item.operation}</Text>

@@ -21,11 +21,11 @@
     "useUnknownInCatchVariables": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    "target": "es2022",
-    "types": [],
-    "customConditions": [
-      "workspace"
-    ]
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "noEmit": true,
+    "types": ["node"],
   },
   "extends": "expo/tsconfig.base"
 }

@@ -1,3 +1,5 @@
+import { AlertCircle, RefreshCw } from "lucide-react";
+
 export default function QueryError({
   message,
   retry,

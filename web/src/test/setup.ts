@@ -7,14 +7,34 @@ afterEach(() => {
   cleanup();
 });
 
-// Mock localStorage
+let store: Record<string, string> = {};
 const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
+  getItem: vi.fn((key: string) => store[key] ?? null),
+  setItem: vi.fn((key: string, value: string) => {
+    store[key] = String(value);
+  }),
+  removeItem: vi.fn((key: string) => {
+    delete store[key];
+  }),
+  clear: vi.fn(() => {
+    store = {};
+  }),
+  get length() {
+    return Object.keys(store).length;
+  },
+  key: vi.fn((i: number) => Object.keys(store)[i] ?? null),
 };
+Object.defineProperty(window, "localStorage", {
+  value: localStorageMock,
+  writable: true,
+});
 global.localStorage = localStorageMock as any;
+
+// Reset store after each test
+afterEach(() => {
+  store = {};
+  vi.clearAllMocks();
+});
 
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
