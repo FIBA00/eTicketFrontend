@@ -130,15 +130,15 @@ export async function pullReferenceData(): Promise<void> {
 
     await cacheData(
       "cached_stations",
-      stations.map((s) => ({ id: s.id, data: s }))
+      stations.map((s: { id: string }) => ({ id: s.id, data: s }))
     );
     await cacheData(
       "cached_routes",
-      routes.map((r) => ({ id: r.id, data: r }))
+      routes.map((r: { id: string }) => ({ id: r.id, data: r }))
     );
     await cacheData(
       "cached_vehicles",
-      vehicles.map((v) => ({ id: v.id, data: v }))
+      vehicles.map((v: { id: string }) => ({ id: v.id, data: v }))
     );
   } catch (err) {
     console.error("Failed to pull reference data:", err);
@@ -149,5 +149,5 @@ export async function getOfflineData<T>(
   table: "cached_stations" | "cached_routes" | "cached_vehicles"
 ): Promise<T[]> {
   const cached = await getCachedData(table);
-  return cached.map((c) => JSON.parse(c.data) as T);
+  return cached.map((c: { id: string; data: string }) => JSON.parse(c.data) as T);
 }

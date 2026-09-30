@@ -42,7 +42,7 @@ export function calcFareBreakdown(input: {
   distanceKm: number;
 }): FareBreakdown {
   const scRate =
-    input.distanceKm <= SHORT_TRIP_THRESHOLD_KM ? SHORT_TRIP_SC_RATE : LONG_TRIP_SC_RATE;
+    input.distanceKm < SHORT_TRIP_THRESHOLD_KM ? SHORT_TRIP_SC_RATE : LONG_TRIP_SC_RATE;
 
   const serviceChargeCents = Math.round(input.fareCents * scRate);
   const vatCents = Math.round(serviceChargeCents * VAT_RATE);
