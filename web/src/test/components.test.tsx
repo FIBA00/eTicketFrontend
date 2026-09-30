@@ -76,7 +76,7 @@ describe("ConfirmDialog Component", () => {
       />,
     );
 
-    fireEvent.click(screen.getByText("Delete"));
+    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
     await waitFor(() => expect(onConfirm).toHaveBeenCalled());
   });
 

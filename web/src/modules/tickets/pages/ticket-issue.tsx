@@ -31,6 +31,7 @@ import { useRoutes, useVehicles, useStations } from "@/hooks/use-api";
 import { useIssueTicket, useIssueBatch } from "@/hooks/use-tickets";
 import { useAuth } from "@/hooks/use-auth";
 import { formatCents } from "@/lib/money-utils";
+import { calcFareBreakdown } from "@/lib/money";
 import { queueTicketIssue, syncNow } from "@/lib/sync-engine";
 import { isOnline } from "@/lib/offline-queue";
 

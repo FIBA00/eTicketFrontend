@@ -17,6 +17,7 @@ export interface Ticket {
   qrHash: string | null;
   batchId: string | null;
   batchSequence: number | null;
+  seatNumber?: number | null;
   ticketerId: string;
   stationId: string;
   clientMutationId: string | null;

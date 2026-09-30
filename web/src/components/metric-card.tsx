@@ -1,3 +1,5 @@
+import { Banknote } from "lucide-react";
+
 export default function MetricCard({
   label,
   value,

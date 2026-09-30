@@ -49,56 +49,45 @@ import {
 
 import AppShell from "./pages/app-shell.tsx";
 import HomePage from "./pages/home-page.tsx";
+import OverviewPage from "./pages/overview-page.tsx";
 import NotFound from "./pages/not-found.tsx";
-
-// import TicketingPage from "@/pages/ticketing-page.tsx";
-// import TicketsPage from "@/pages/tickets-page.tsx";
-// import RevenuePage from "@/pages/revenue-page.tsx";
-// import SettingsPage from "@/pages/settings-page.tsx";
 import LoginPage from "./modules/auth/pages/login.tsx";
-// import StationsPage from "@/pages/stations";
-// import VehiclesPage from "@/pages/vehicles";
-// import RoutesPage from "@/pages/routes";
-// import UsersPage from "@/pages/users";
-// // import TicketsPage from "@/pages/tickets";
-// import TicketIssuePage from "@/pages/ticket-issue";
-// import TicketDetailPage from "@/pages/ticket-detail";
-// import BatchViewPage from "@/pages/batch-view";
-// import DisplayPage from "@/pages/display";
-// import PublicDisplayPage from "@/pages/display-public";
+import StationsPage from "./pages/stations.tsx";
+import VehiclesPage from "./pages/vehicles.tsx";
+import RoutesPage from "./pages/routes.tsx";
+import UsersPage from "./modules/user/pages/users.tsx";
+import TicketsPage from "./modules/tickets/pages/tickets.tsx";
+import TicketIssuePage from "./modules/tickets/pages/ticket-issue.tsx";
+import TicketDetailPage from "./modules/tickets/pages/ticket-detail.tsx";
+import BatchViewPage from "./pages/batch-view.tsx";
+import RevenuePage from "./modules/finance/pages/revenue.tsx";
+import SettingsPage from "./pages/settings-page.tsx";
+import DisplayPage from "./modules/display/pages/display.tsx";
+import PublicDisplayPage from "./modules/display/pages/display-public.tsx";
+import DispatchPage from "./pages/dispatch.tsx";
 
-// // # components
+// # components
 import ProtectedRoute from "./components/protected-route.tsx";
-// import PageHeader from "./components/page-header.tsx";
-// import LoadingBlock from "./components/loading-block.tsx";
-// import QueryError from "./components/query-error.tsx";
-// import EmptyState from "./components/empty-state.tsx";
-// import MetricCard from "./components/metric-card.tsx";
-// import SectionLabel from "./components/section-label.tsx";
-// import TicketRow from "./components/ticket-row.tsx";
-// import BreakdownRow from "./components/breakdown-row.tsx";
-// import QueuedRegister from "./components/queued-register.tsx";
-// import SettingValue from "./components/settings-value.tsx";
-// import UserMenu from "./components/user-menu";
-// import SyncStatus from "./components/sync-status";
 import Toaster from "./components/ui/toaster.tsx";
 import { TooltipProvider } from "./components/ui/tooltip.tsx";
 import { ErrorBoundary } from "./components/error-boundary.tsx";
 
-// // #  hooks
-// import { useAuth } from "./hooks/use-auth";
+// # hooks
 import { AuthProvider } from "./modules/auth/hooks/use-auth.tsx";
 
-// // # libs
+// # libs
 import { getAccessToken, refreshAccessToken } from "./lib/auth.ts";
-import { setBaseUrl,getBaseUrl, setAuthTokenGetter } from "./lib/api-config.ts";
+import { setBaseUrl, getBaseUrl, setAuthTokenGetter } from "./lib/api-config.ts";
 import { initAutoSync } from "./lib/sync-engine.ts";
 
-// # utils
-
 import React from "react";
-import { env } from "process";
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes caching
+    },
+  },
+});
 
 function Router() {
   const [location] = useLocation();
@@ -117,130 +106,155 @@ function Router() {
           )}
         </Route>
 
-        {/*
-				
-				<Route path="/ticketing">
-					{() => (
-						<ProtectedRoute
-							roles={[
-								"TICKETER",
-								"SYSTEM_ADMIN",
-								"STATION_CONTROLLER",
-							]}>
-							<AppShell>
-								<TicketingPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/tickets">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<TicketsPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/revenue">
-					{() => (
-						<ProtectedRoute
-							roles={["SYSTEM_ADMIN", "STATION_CONTROLLER"]}>
-							<AppShell>
-								<RevenuePage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/settings">
-					{() => (
-						<ProtectedRoute roles={["SYSTEM_ADMIN"]}>
-							<AppShell>
-								<SettingsPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/stations">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<StationsPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/vehicles">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<VehiclesPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/routes">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<RoutesPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/users">
-					{() => (
-						<ProtectedRoute roles={["SYSTEM_ADMIN"]}>
-							<AppShell>
-								<UsersPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/ticketing/issue">
-					{() => (
-						<ProtectedRoute
-							roles={[
-								"TICKETER",
-								"SYSTEM_ADMIN",
-								"STATION_CONTROLLER",
-							]}>
-							<AppShell>
-								<TicketIssuePage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/tickets/batch/:batchId">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<BatchViewPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/tickets/:id">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<TicketDetailPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/display">
-					{() => (
-						<ProtectedRoute>
-							<AppShell>
-								<DisplayPage />
-							</AppShell>
-						</ProtectedRoute>
-					)}
-				</Route>
-				<Route path="/display/public/:stationId">
-					{() => <PublicDisplayPage />}
-				</Route> */}
+        <Route path="/overview">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <OverviewPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/ticketing">
+          {() => (
+            <ProtectedRoute
+              roles={["TICKETER", "SYSTEM_ADMIN", "STATION_CONTROLLER"]}
+            >
+              <AppShell>
+                <TicketIssuePage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/ticketing/issue">
+          {() => (
+            <ProtectedRoute
+              roles={["TICKETER", "SYSTEM_ADMIN", "STATION_CONTROLLER"]}
+            >
+              <AppShell>
+                <TicketIssuePage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/tickets">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <TicketsPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/tickets/batch/:batchId">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <BatchViewPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/tickets/:id">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <TicketDetailPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/revenue">
+          {() => (
+            <ProtectedRoute roles={["SYSTEM_ADMIN", "STATION_CONTROLLER"]}>
+              <AppShell>
+                <RevenuePage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/settings">
+          {() => (
+            <ProtectedRoute roles={["SYSTEM_ADMIN"]}>
+              <AppShell>
+                <SettingsPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/stations">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <StationsPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/vehicles">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <VehiclesPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/routes">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <RoutesPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/users">
+          {() => (
+            <ProtectedRoute roles={["SYSTEM_ADMIN"]}>
+              <AppShell>
+                <UsersPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/display">
+          {() => (
+            <ProtectedRoute>
+              <AppShell>
+                <DisplayPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
+
+        <Route path="/display/public/:stationId">
+          {() => <PublicDisplayPage />}
+        </Route>
+
+        <Route path="/dispatch">
+          {() => (
+            <ProtectedRoute
+              roles={["AGENT", "SYSTEM_ADMIN", "STATION_CONTROLLER"]}
+            >
+              <AppShell>
+                <DispatchPage />
+              </AppShell>
+            </ProtectedRoute>
+          )}
+        </Route>
 
         <Route component={NotFound} />
       </Switch>

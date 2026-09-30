@@ -107,8 +107,8 @@ export default function StationsPage() {
       code: form.code.toUpperCase(),
       city: form.city,
       region: form.region,
-      latitude: form.latitude ? parseFloat(form.latitude) : undefined,
-      longitude: form.longitude ? parseFloat(form.longitude) : undefined,
+      latitude: form.latitude ? parseFloat(form.latitude) : null,
+      longitude: form.longitude ? parseFloat(form.longitude) : null,
     };
 
     try {

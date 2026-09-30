@@ -4,7 +4,10 @@ export interface PrintTicketData {
   ticketNumber: string;
   passengerName: string;
   passengerPhone?: string;
-  seatNumber: number;
+  driverName?: string | null;
+  seatNumber?: number | null;
+  batchSequence?: number | null;
+  qrHash?: string | null;
   departureDate: string;
   departureTime: string;
 

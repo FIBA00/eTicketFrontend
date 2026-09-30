@@ -3,7 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // ! internal imports
 import { authFetch } from "../lib/auth.ts";
-import {User, Route, Vehicle, Station} from "../lib/shared/types/api.types.ts";
+import { User, Route, Vehicle, Station } from "../lib/shared/types/api.types.ts";
+export type { User, Route, Vehicle, Station };
 
 // ── Stations API ─────────────────────────────────────────────
 

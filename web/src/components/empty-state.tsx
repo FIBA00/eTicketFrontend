@@ -1,3 +1,6 @@
+import type { ReactNode } from "react";
+import { ReceiptText } from "lucide-react";
+
 export default function EmptyState({
   title,
   description,

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
 // ! internal imports
-import { authFetch } from "../lib/auth.ts";
-import {StationSummary, DisplayVehicle, StationDisplay} from "../lib/shared/types/api.types.ts";
+import { authFetch } from "@/lib/auth";
+import { StationSummary, DisplayVehicle, StationDisplay } from "@/lib/shared/types/api.types";
+export type { StationSummary, DisplayVehicle, StationDisplay };
 
 export function useStationDisplay(stationId: string | null) {
   return useQuery({

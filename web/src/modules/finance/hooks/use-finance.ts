@@ -8,15 +8,19 @@ import {
   Commission,
   DailyAudit,
 } from "../../../lib/shared/types/finance.types.ts";
+export type { RevenueReport, Withdrawal, Commission, DailyAudit };
 
 // ── Queries ──────────────────────────────────────────────────
 
-export function useDailyAudit(date?: string) {
+export function useDailyAudit(date?: string, stationId?: string) {
   const dateParam = date || new Date().toISOString().split("T")[0];
+  const params = new URLSearchParams({ date: dateParam });
+  if (stationId) params.set("stationId", stationId);
+
   return useQuery({
-    queryKey: ["dailyAudit", dateParam],
+    queryKey: ["dailyAudit", dateParam, stationId],
     queryFn: async () => {
-      const res = await authFetch(`/finance/daily-audit?date=${dateParam}`);
+      const res = await authFetch(`/finance/daily-audit?${params}`);
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch audit");
       return res.json() as Promise<DailyAudit>;
@@ -27,11 +31,14 @@ export function useDailyAudit(date?: string) {
 export function useGenerateAudit() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (date: string) => {
+    mutationFn: async (
+      input: string | { date: string; stationId?: string },
+    ) => {
+      const payload = typeof input === "string" ? { date: input } : input;
       const res = await authFetch("/finance/daily-audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date }),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => null);
@@ -39,18 +46,22 @@ export function useGenerateAudit() {
       }
       return res.json() as Promise<DailyAudit>;
     },
-    onSuccess: (_data, date) => {
-      qc.invalidateQueries({ queryKey: ["dailyAudit", date] });
+    onSuccess: (_data, input) => {
+      const date = typeof input === "string" ? input : input.date;
+      qc.invalidateQueries({ queryKey: ["dailyAudit"] });
       qc.invalidateQueries({ queryKey: ["auditHistory"] });
     },
   });
 }
 
-export function useAuditHistory(limit = 30) {
+export function useAuditHistory(limit = 30, stationId?: string) {
+  const params = new URLSearchParams({ limit: limit.toString() });
+  if (stationId) params.set("stationId", stationId);
+
   return useQuery({
-    queryKey: ["auditHistory", limit],
+    queryKey: ["auditHistory", limit, stationId],
     queryFn: async () => {
-      const res = await authFetch(`/finance/audit-history?limit=${limit}`);
+      const res = await authFetch(`/finance/audit-history?${params}`);
       if (!res.ok) throw new Error("Failed to fetch history");
       return res.json() as Promise<DailyAudit[]>;
     },
@@ -108,13 +119,18 @@ export function useRequestWithdrawal() {
   });
 }
 
-export function useRevenueReport(startDate?: string, endDate?: string) {
+export function useRevenueReport(
+  startDate?: string,
+  endDate?: string,
+  stationId?: string,
+) {
   const params = new URLSearchParams();
   if (startDate) params.set("startDate", startDate);
   if (endDate) params.set("endDate", endDate);
+  if (stationId) params.set("stationId", stationId);
 
   return useQuery({
-    queryKey: ["revenue", startDate, endDate],
+    queryKey: ["revenue", startDate, endDate, stationId],
     queryFn: async () => {
       const res = await authFetch(`/finance/revenue?${params}`);
       if (!res.ok) throw new Error("Failed to fetch revenue");
